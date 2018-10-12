@@ -1,0 +1,56 @@
+{
+  "name": "ethavatar",
+  "version": "1.0.0-beta.1",
+  "description": "Gravatar for Ethereum address",
+  "keywords": [
+    "ethereum",
+    "web3",
+    "ipfs",
+    "avatar",
+    "gravatar",
+    "decentralized"
+  ],
+  "author": "Gitcoin Community (https://gitcoin.co/)",
+  "license": "MIT",
+  "homepage": "https://github.com/gitcoinco/ethavatar/",
+  "bugs": "https://github.com/filips123/ethavatar.js/issues/",
+  "main": "src/index.js",
+  "unpkg": "dist/ethavatar.min.js",
+  "jsdelivr": "dist/ethavatar.min.js",
+  "bin": {
+    "ethavatar": "src/console.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filips123/ethavatar.js.git"
+  },
+  "dependencies": {
+    "web3": "0.x",
+    "truffle-contract": "3.x",
+    "ipfs-api": "24.x"
+  },
+  "devDependencies": {
+    "aegir": "^15.0.0"
+  },
+  "scripts": {
+    "build": "aegir build",
+    "lint": "aegir lint",
+    "test": "aegir test",
+    "test:node": "aegir test --target node",
+    "test:browser": "aegir test --target browser",
+    "test:webworker": "aegir test --target webworker",
+    "coverage": "aegir coverage",
+    "docs": "aegir docs",
+    "release": "aegir release",
+    "release:major": "aegir release --type major",
+    "release:minor": "aegir release --type minor",
+    "release:patch": "aegir release --type patch",
+    "release:prerelease": "aegir release --type prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "eslintIgnore": [
+    "example.js"
+  ]
+}
