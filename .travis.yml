@@ -7,17 +7,16 @@ node_js:
 cache: yarn
 
 before_install:
-  - travis_retry yarn global add aegir
-  - travis_retry yarn global add truffle ganache-cli
+  - travis_retry yarn global add aegir truffle ganache-cli
 
 install:
   - travis_retry yarn install
 
 before_script:
-  # Start Ganche CLI
+  # Start Ganache CLI
   - ganache-cli | head -42 &
 
-  # Deploy smart contract to Ganche CLI
+  # Deploy smart contract to Ganache CLI
   - |
     (
       git clone https://github.com/gitcoinco/ethavatar.git /tmp/ethavatar
@@ -34,24 +33,23 @@ script:
   - yarn coverage 2> /dev/null | sed -n -e '/----------/,$p' | sed \$d
 
 after_success:
+  # Set Git User
+  - git config --global user.email "travis@travis-ci.com"
+  - git config --global user.name "Travis CI"
+
+  # Update smart contract
+  - wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/EthAvatar.json
+  - git add src/EthAvatar.json
+  - git commit -m "Update smart contract"
+
+  # Build documentation
+  - yarn docs
+  - git add docs
+  - git commit -m "Build documentation"
+
+  # Publish to GitHub
   - |
     if [[ ${TRAVIS_NODE_VERSION:0:2} == "10" ]]
     then
-      # Set Git User and Repository
-      git config --global user.email "travis@travis-ci.com"
-      git config --global user.name "Travis CI"
-      git remote add origin https://${GH_TOKEN}@github.com/filips123/ethavatar.js.git > /dev/null 2>&1
-
-      # Update smart contract
-      wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/EthAvatar.json
-      git add src/EthAvatar.json
-      git commit -m "Update smart contract"
-
-      # Build documentation
-      yarn docs
-      git add docs
-      git commit -m "Build documentation"
-
-      # Publish to GitHub
-      git push origin master > /dev/null 2>&1
+      git push https://${GH_TOKEN}@github.com/filips123/ethavatar.js.git master > /dev/null 2>&1 && echo Code published successfully || echo Error while publishing code
     fi
