@@ -55,5 +55,5 @@ after_success:
   - |
     if [[ ${TRAVIS_NODE_VERSION:0:2} == "10" ]]
     then
-      git push https://${GH_TOKEN}@github.com/filips123/ethavatar.js.git master > /dev/null 2>&1 && echo Code published successfully || echo Error while publishing code
+      git push --set-upstream https://${GH_TOKEN}@github.com/filips123/EthAvatar.JS.git master > /dev/null 2>&1 && echo Code published successfully || echo Error while publishing code
     fi
