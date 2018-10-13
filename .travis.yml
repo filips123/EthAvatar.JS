@@ -1,0 +1,58 @@
+language: node_js
+
+node_js:
+  - 6
+  - 8
+  - 10
+
+cache: yarn
+
+before_install:
+  - travis_retry yarn global add aegir
+  - travis_retry yarn global add truffle ganache-cli
+
+install:
+  - travis_retry yarn install
+
+before_script:
+  # Start Ganche CLI
+  - ganache-cli | head -42
+
+  # Deploy smart contract to Ganche CLI
+  - |
+    (
+      git clone https://github.com/gitcoinco/ethavatar.git /tmp/ethavatar
+      cd /tmp/ethavatar
+      printf "module.exports = {\nnetworks: {\ndevelopment: {\nhost: \"127.0.0.1\",\nport: 8545,\nnetwork_id: \"*\"\n}\n}\n}" > truffle.js
+      rm -rf build && truffle migrate
+    )
+
+  # Copy smart contract to package
+  - cp /tmp/ethavatar/build/contracts/EthAvatar.json $TRAVIS_BUILD_DIR/src/EthAvatar.json
+
+script:
+  - yarn test:node
+  - yarn coverage 2> /dev/null | sed -n -e '/----------/,$p' | sed \$d
+
+after_success:
+  - |
+    if [[ ${TRAVIS_NODE_VERSION:0:2} == "10" ]]
+    then
+      # Set Git User and Repository
+      git config --global user.email "travis@travis-ci.com"
+      git config --global user.name "Travis CI"
+      git remote add origin https://${GH_TOKEN}@github.com/filips123/ethavatar.js.git > /dev/null 2>&1
+
+      # Update smart contract
+      wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/EthAvatar.json
+      git add src/EthAvatar.json
+      git commit -m "Update smart contract"
+
+      # Build documentation
+      yarn docs
+      git add docs
+      git commit -m "Build documentation"
+
+      # Publish to GitHub
+      git push origin master > /dev/null 2>&1
+    fi
