@@ -29,7 +29,11 @@ before_script:
   - cp /tmp/ethavatar/build/contracts/EthAvatar.json $TRAVIS_BUILD_DIR/src/EthAvatar.json
 
 script:
+  # Run lint and test
+  - yarn lint
   - yarn test:node
+
+  # Display coverage
   - yarn coverage 2> /dev/null | sed -n -e '/----------/,$p' | sed \$d
 
 after_success:
@@ -40,12 +44,12 @@ after_success:
   # Update smart contract
   - wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/EthAvatar.json
   - git add src/EthAvatar.json
-  - git commit -m "Update smart contract"
+  - git commit -m "[ci skip] Update smart contract"
 
   # Build documentation
   - yarn docs
   - git add docs
-  - git commit -m "Build documentation"
+  - git commit -m "[ci skip] Build documentation"
 
   # Publish to GitHub
   - |
