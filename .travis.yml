@@ -15,7 +15,7 @@ install:
 
 before_script:
   # Start Ganche CLI
-  - ganache-cli | head -42
+  - ganache-cli | head -42 &
 
   # Deploy smart contract to Ganche CLI
   - |
