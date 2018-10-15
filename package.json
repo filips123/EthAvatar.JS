@@ -27,7 +27,9 @@
   "dependencies": {
     "web3": "0.x",
     "truffle-contract": "3.x",
-    "ipfs-api": "24.x"
+    "ipfs-api": "24.x",
+    "commander": "2.x",
+    "user-settings": "0.x"
   },
   "devDependencies": {
     "aegir": "^15.0.0"

@@ -21,8 +21,8 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 
 ### TODO
 
+* [x] ~~Command line program~~
 * [ ] Support for JavaScript fronted frameworks
-* [ ] Command line program
 * [ ] Better tests
 * [ ] Watching for contract events
 * [ ] Uploading avatars from files or URLs
@@ -66,7 +66,29 @@ If you want to use EthAvatar.JS in browser, you could include scripts from one o
 
 ### In Command Line
 
-TODO: Command line program is currently not implemented!
+Command line program allows you to get and set avatars using files.
+
+First you should specify Web3 and IPFS connection using `ethavatar config`:
+
+```bash
+$ ethavatar config --web3 http://127.0.0.1:8545/
+$ ethavatar config --ipfs https://ipfs.infura.io:5001/
+```
+
+Program will save them in `~/.ethavatar` file. Web3 connection is required and only HTTP provider is supported. IPFS connection is optional and it uses Infura IPFS API by default.
+
+You can get avatar to file using `ethavatar get <filename>`:
+
+```bash
+$ ethavatar get avatar.jpg # Save avatar of current address to file avatar.jpg
+$ ethavatar get avatar.jpg --address 0x0000000000000000000000000000000000000000 # Save avatar of address 0x0000000000000000000000000000000000000000 to file avatar.jpg
+```
+
+You can set avatar using `ethavatar set <filename>`:
+
+```bash
+$ ethavatar set avatar.jpg # Uplaod avatar of current address from fileavatar.jpg
+```
 
 ### In Applications
 

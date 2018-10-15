@@ -2812,6 +2812,10 @@ commander@2.9.0:
   dependencies:
     graceful-readlink ">= 1.0.0"
 
+commander@2.x:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+
 commander@^2.15.0, commander@^2.8.1, commander@^2.9.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.18.0.tgz#2bf063ddee7c7891176981a2cc798e5754bc6970"
@@ -10347,6 +10351,10 @@ urlgrey@^0.4.4:
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
+
+user-settings@0.x:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/user-settings/-/user-settings-0.2.0.tgz#8284405a59b3060135cf352ec3511c8fd046707d"
 
 useragent@2.2.1:
   version "2.2.1"
