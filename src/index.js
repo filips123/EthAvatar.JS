@@ -1,3 +1,4 @@
+/* global ethereum:true */
 /* global web3:true */
 
 'use strict'
@@ -9,6 +10,7 @@ const IpfsAPI = require('ipfs-api')
 const EthAvatarContract = require('./EthAvatar.json')
 
 class Web3ProviderNotFoundError extends Error {}
+class Web3NotAllowedError extends Error {}
 class DefaultAddressNotFoundError extends Error {}
 class ContractNotFoundError extends Error {}
 class GetAvatarError extends Error {}
@@ -36,8 +38,13 @@ class EthAvatar {
   async _initialize (web3Conn, ipfsConn, contract) {
     // Get Web3 connection
     if (web3Conn === null) {
-      if (typeof web3 !== 'undefined') {
+      // Modern dapp browsers
+      if (typeof ethereum !== 'undefined') {
+        this.web3 = new Web3(ethereum)
+      // Legacy dapp browsers
+      } else if (typeof web3 !== 'undefined') {
         this.web3 = new Web3(web3.currentProvider)
+      // Other browsers
       } else {
         throw new Web3ProviderNotFoundError('Default Web3 provider not found')
       }
@@ -70,7 +77,7 @@ class EthAvatar {
       this.instance = await getContract(contract)
 
       return this
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       let err = new ContractNotFoundError(error.message)
       err.stack = error.stack
 
@@ -89,6 +96,18 @@ class EthAvatar {
    */
   async get (address = null) {
     await this._initialized
+
+    // Enable Web3 provider (EIP-1102)
+    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+      try {
+        await ethereum.enable()
+      } catch (error) /* istanbul ignore next */ {
+        let err = new Web3NotAllowedError(error)
+        err.stack = error.stack
+
+        throw err
+      }
+    }
 
     // Get Ethereum address
     if (address === null) {
@@ -138,6 +157,18 @@ class EthAvatar {
    */
   async set (buffer) {
     await this._initialized
+
+    // Enable Web3 provider (EIP-1102)
+    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+      try {
+        await ethereum.enable()
+      } catch (error) /* istanbul ignore next */ {
+        let err = new Web3NotAllowedError(error)
+        err.stack = error.stack
+
+        throw err
+      }
+    }
 
     // Get Ethereum address
     let address = null
