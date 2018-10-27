@@ -25,6 +25,17 @@ describe('EthAvatar', function () {
   })
 
   describe('#_initialize()', function () {
+    it('should construct using current privacy (EIP-1102) Web3 provider', async function () {
+      global.ethereum = global.web3.currentProvider
+      global.ethereum.enable = async () => {
+        return true
+      }
+
+      new EthAvatar()
+
+      delete global.ethereum
+    })
+
     it('should construct using current Web3 provider', async function () {
       new EthAvatar()
     })
@@ -59,7 +70,10 @@ describe('EthAvatar', function () {
     })
 
     it('should construct using specified contract address', async function () {
-      new EthAvatar(null, null, '0x0')
+      let contract = require ('../src/EthAvatar.json')
+      let address = contract['networks'][web3.version.network]['address']
+
+      new EthAvatar(null, null, address)
     })
   })
 
@@ -69,8 +83,20 @@ describe('EthAvatar', function () {
       await ethavatar.set(avatar)
     })
 
+    it('should enable privacy (EIP-1102) Web3 provider', async function () {
+      global.ethereum = global.web3.currentProvider
+      global.ethereum.enable = async () => {
+        return true
+      }
+
+      let ethavatar = new EthAvatar()
+      await ethavatar.get()
+
+      delete global.ethereum
+    })
+
     it('should not get avatar that not exists', async function () {
-      let avatar = await ethavatar.get('0x0')
+      let avatar = await ethavatar.get('0xA06d95Ec8a2c91cC3ED6d7F63C0f71F75Cc4EBf1')
       assert.strictEqual(typeof avatar, 'undefined', 'Avatar that not exists is not undefined')
     })
 
@@ -84,6 +110,19 @@ describe('EthAvatar', function () {
   })
 
   describe('#set()', function () {
+    it('should enable privacy (EIP-1102) Web3 provider', async function () {
+      global.ethereum = global.web3.currentProvider
+      global.ethereum.enable = async () => {
+        return true
+      }
+
+      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      let ethavatar = new EthAvatar()
+      await ethavatar.set(avatar)
+
+      delete global.ethereum
+    })
+
     it('should set avatar', async function () {
       let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
