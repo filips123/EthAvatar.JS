@@ -142,7 +142,7 @@ let set = (required, optional) => {
 }
 
 program
-  .version('1.0.0-beta.1')
+  .version('1.0.0-beta.4')
   .description('JavaScript API for EthAvatar')
 
 program
