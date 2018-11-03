@@ -15,6 +15,7 @@ class DefaultAddressNotFoundError extends Error {}
 class ContractNotFoundError extends Error {}
 class GetAvatarError extends Error {}
 class SetAvatarError extends Error {}
+class RemoveAvatarError extends Error {}
 
 /**
  * Client class for EthAvatar.
@@ -193,6 +194,49 @@ class EthAvatar {
       return
     } catch (error) /* istanbul ignore next */ {
       let err = new SetAvatarError(error.message)
+      err.stack = error.stack
+
+      throw err
+    }
+  }
+
+  /**
+   * Remove avatar of Ethereum address.
+   *
+   * @return {void}
+   *
+   * @async
+   */
+  async remove () {
+    await this._initialized
+
+    // Enable Web3 provider (EIP-1102)
+    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+      try {
+        await ethereum.enable()
+      } catch (error) /* istanbul ignore next */ {
+        let err = new Web3NotAllowedError(error)
+        err.stack = error.stack
+
+        throw err
+      }
+    }
+
+    // Get Ethereum address
+    let address = null
+    if (typeof this.web3.eth.accounts[0] !== 'undefined') {
+      address = this.web3.eth.accounts[0]
+    } else /* istanbul ignore next */ {
+      throw new DefaultAddressNotFoundError('Default Ethereum address not found')
+    }
+
+    // Remove avatar
+    try {
+      await this.instance.setIPFSHash('', { from: address })
+
+      return
+    } catch (error) /* istanbul ignore next */ {
+      let err = new RemoveAvatarError(error.message)
       err.stack = error.stack
 
       throw err

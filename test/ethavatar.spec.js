@@ -133,4 +133,27 @@ describe('EthAvatar', function () {
       assert(Buffer.compare(expected, actual) === 0, 'Avatar is not correctly set')
     })
   })
+
+  describe('#remove()', function () {
+    it('should enable privacy (EIP-1102) Web3 provider', async function () {
+      global.ethereum = global.web3.currentProvider
+      global.ethereum.enable = async () => {
+        return true
+      }
+
+      let ethavatar = new EthAvatar()
+      await ethavatar.remove()
+
+      delete global.ethereum
+    })
+
+    it('should remove avatar', async function () {
+      await ethavatar.remove()
+
+      let expected = undefined
+      let actual = await ethavatar.get()
+
+      assert.strictEqual(actual, expected, 'Avatar is not correctly removed')
+    })
+  })
 })
