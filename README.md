@@ -22,11 +22,11 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 ### TODO
 
 * [x] ~~Command line program~~
+* [x] ~~Watching for contract events~~
+* [x] ~~Deleting avatars~~
 * [ ] Support for JavaScript fronted frameworks
 * [ ] Better tests
-* [ ] Watching for contract events
 * [ ] Uploading avatars from files or URLs
-* [ ] Deleting avatars
 
 ## Installation
 
@@ -175,6 +175,27 @@ ethavatar.set(avatar)
   }).catch((error) => {
     console.error(error.message)
   })
+```
+
+You should use `remove()` to remove avatar of address. It doesn't have any parameters and you could only remove avatar of your address:
+
+```js
+ethavatar.remove()
+  .then(() => {
+    console.log('Avatar removed!')
+
+  }).catch((error) => {
+    console.error(error.message)
+  })
+```
+
+You can also watch for avatar changes of specific address. It uses current address as default, but you could specify any other address:
+
+```js
+ethavatar.watch((result => {
+  console.log('User address: ' + result.hashAddress)
+  console.log('IPFS hash: ' + result.hash)
+}, '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
 ```
 
 You could also look to [`example.js`][link-example] or [API documentation][link-documentation].
