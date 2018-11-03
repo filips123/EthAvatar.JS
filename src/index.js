@@ -99,9 +99,9 @@ class EthAvatar {
     await this._initialized
 
     // Enable Web3 provider (EIP-1102)
-    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+    if (typeof this.web3.currentProvider.enable !== 'undefined') {
       try {
-        await ethereum.enable()
+        await this.web3.currentProvider.enable()
       } catch (error) /* istanbul ignore next */ {
         let err = new Web3NotAllowedError(error)
         err.stack = error.stack
@@ -160,9 +160,9 @@ class EthAvatar {
     await this._initialized
 
     // Enable Web3 provider (EIP-1102)
-    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+    if (typeof this.web3.currentProvider.enable !== 'undefined') {
       try {
-        await ethereum.enable()
+        await this.web3.currentProvider.enable()
       } catch (error) /* istanbul ignore next */ {
         let err = new Web3NotAllowedError(error)
         err.stack = error.stack
@@ -211,9 +211,9 @@ class EthAvatar {
     await this._initialized
 
     // Enable Web3 provider (EIP-1102)
-    if (typeof ethereum !== 'undefined' && typeof this.web3.currentProvider.enable !== 'undefined') {
+    if (typeof this.web3.currentProvider.enable !== 'undefined') {
       try {
-        await ethereum.enable()
+        await this.web3.currentProvider.enable()
       } catch (error) /* istanbul ignore next */ {
         let err = new Web3NotAllowedError(error)
         err.stack = error.stack
@@ -241,6 +241,50 @@ class EthAvatar {
 
       throw err
     }
+  }
+
+  /**
+   * Watch for avatar changes.
+   *
+   * @param {function} [callback] - Callback when event is received.
+   * @param {string} [address] - Address to watch (default is current Ethereum address).
+   *
+   * @return {void}
+   */
+  watch (callback, address = null) {
+    this._initialized
+      .then(async () => {
+        // Enable Web3 provider (EIP-1102)
+        if (typeof this.web3.currentProvider.enable !== 'undefined') {
+          try {
+            await this.web3.currentProvider.enable()
+          } catch (error) /* istanbul ignore next */ {
+            let err = new Web3NotAllowedError(error)
+            err.stack = error.stack
+
+            throw err
+          }
+        }
+      }).then(async () => {
+        // Get Ethereum address
+        if (typeof this.web3.eth.accounts[0] !== 'undefined') {
+          address = this.web3.eth.accounts[0]
+        } else /* istanbul ignore next */ {
+          throw new DefaultAddressNotFoundError('Default Ethereum address not found')
+        }
+
+        // Get contract event
+        const event = this.instance.DidSetIPFSHash()
+
+        // Watch for changes
+        event.watch((error, result) => {
+          if (!error) {
+            if (result.args.hashAddress === address) {
+              callback(result.args)
+            }
+          }
+        })
+      })
   }
 }
 

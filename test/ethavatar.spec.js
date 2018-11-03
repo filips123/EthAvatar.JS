@@ -156,4 +156,30 @@ describe('EthAvatar', function () {
       assert.strictEqual(actual, expected, 'Avatar is not correctly removed')
     })
   })
+
+  describe('#watch()', function () {
+    it('should enable privacy (EIP-1102) Web3 provider', async function () {
+      global.ethereum = global.web3.currentProvider
+      global.ethereum.enable = async () => {
+        return true
+      }
+
+      let ethavatar = new EthAvatar()
+      ethavatar.watch((result) => { return true })
+
+      delete global.ethereum
+    })
+
+    it('should watch for avatar changes', async function () {
+      ethavatar.watch(async (result) => {
+        let expected = web3.eth.accounts[0]
+        let actual = result.hashAddress
+
+        assert.strictEqual(actual, expected, 'Watching address is not correct')
+      })
+
+      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      await ethavatar.set(avatar)
+    })
+  })
 })
