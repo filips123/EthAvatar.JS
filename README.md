@@ -215,7 +215,7 @@ This project uses [SemVer][link-semver] for versioning. For the versions availab
 ## License
 This project is licensed under the MIT license. See the [`LICENSE`][link-license] file for details.
 
-[icon-logo]: https://screenshotscdn.firefoxusercontent.com/images/b7ab11e1-f9f7-4c20-9b32-5c0edbd17d9e.png
+[icon-logo]: https://screenshotscdn.firefoxusercontent.com/images/ea73525d-a516-4795-b5f3-8ad967d9a324.png
 
 [link-ethavatar]: https://github.com/gitcoinco/ethavatar/
 [link-contract]: https://etherscan.io/address/0x4FbF2f1613Cc86314b22AE10Ae95D19cF2990824/
