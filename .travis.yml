@@ -27,7 +27,7 @@ before_script:
     )
 
   # Copy smart contract to package
-  - cp /tmp/ethavatar/build/contracts/EthAvatar.json $TRAVIS_BUILD_DIR/src/EthAvatar.json
+  - cp /tmp/ethavatar/build/contracts/EthAvatar.json $TRAVIS_BUILD_DIR/src/data/EthAvatar.json
 
 script:
   # Run lint and test
@@ -38,13 +38,14 @@ script:
   - yarn coverage 2> /dev/null | sed -n -e '/----------/,$p' | sed \$d
 
 after_success:
-  # Set Git User
+  # Set Git user and branch
   - git config --global user.email "travis@travis-ci.com"
   - git config --global user.name "Travis CI"
+  - git checkout -qf master
 
   # Update smart contract
-  - wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/EthAvatar.json
-  - git add src/EthAvatar.json
+  - wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/data/EthAvatar.json
+  - git add src/data/EthAvatar.json
   - git commit -m "[ci skip] Update smart contract"
 
   # Build documentation
@@ -58,3 +59,13 @@ after_success:
     then
       git push --set-upstream https://${GH_TOKEN}@github.com/filips123/EthAvatar.JS.git master > /dev/null 2>&1 && echo Code published successfully || echo Error while publishing code
     fi
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  on:
+    tags: true
+  script:
+    - printf "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > $HOME/.npmrc
+    - yarn build
+    - yarn publish --non-interactive
