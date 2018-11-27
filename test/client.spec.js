@@ -15,7 +15,7 @@ const IpfsAPI = require('ipfs-api')
 const EthAvatar = require('../src/client.js')
 
 describe('EthAvatar', function () {
-  this.timeout(15000)
+  this.timeout(60000)
 
   before(function () {
     const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')

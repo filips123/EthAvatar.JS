@@ -19,7 +19,7 @@ const EthAvatar = require('../../src/client.js')
 const FileHelper = require('../../src/helpers/file.js')
 
 describe('FileHelper', function () {
-  this.timeout(25000)
+  this.timeout(60000)
 
   before(function () {
     const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')
