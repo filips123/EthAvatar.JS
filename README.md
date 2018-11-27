@@ -24,9 +24,9 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 * [x] ~~Command line program~~
 * [x] ~~Watching for contract events~~
 * [x] ~~Deleting avatars~~
+* [x] ~~Uploading avatars from files or URLs~~
+* [x] ~~Better tests~~
 * [ ] Support for JavaScript fronted frameworks
-* [ ] Better tests
-* [ ] Uploading avatars from files or URLs
 
 ## Installation
 
@@ -92,6 +92,8 @@ $ ethavatar set avatar.jpg # Uplaod avatar of current address from fileavatar.jp
 
 ### In Applications
 
+#### Instantiation
+
 The whole class is asynchronous, so you would need to use promises or `async`/`await` in your application.
 
 First, include this library and instantiate the class in your file:
@@ -129,6 +131,8 @@ const ethavatar = new EthAvatar(
 )
 ```
 
+#### Getting Avatars
+
 You should use method `get()` to get avatar of address. It uses current address as default, but you could specify any other address:
 
 ```js
@@ -163,6 +167,8 @@ ethavatar.get()
 
 The avatar is returned as `buffer`, so you could directly write it to file.
 
+#### Setting Avatars
+
 You should use `set()` to set avatar of address. It's parameter must be `buffer` of avatar, so it is possible to upload it from a file:
 
 ```js
@@ -177,6 +183,8 @@ ethavatar.set(avatar)
   })
 ```
 
+#### Deleting Avatars
+
 You should use `remove()` to remove avatar of address. It doesn't have any parameters and you could only remove avatar of your address:
 
 ```js
@@ -189,6 +197,8 @@ ethavatar.remove()
   })
 ```
 
+#### Watching Changes
+
 You can also watch for avatar changes of specific address. It uses current address as default, but you could specify any other address:
 
 ```js
@@ -198,7 +208,77 @@ ethavatar.watch((result => {
 }, '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
 ```
 
-You could also look to [`example.js`][link-example] or [API documentation][link-documentation].
+#### File Operations
+
+File operations are possible with `FileHelper` class:
+
+```js
+const FileHelper = require('ethavatar').fileHelper
+const fileHelper = new FileHelper(ethavatar)
+```
+
+You can then save avatar directly to file:
+
+```js
+fileHelper.toFile('avatar.png', '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
+  .then((avatar) => {
+    console.log('Avatar saved!')
+
+  }).catch((error) => {
+    console.error(error.message)
+  })
+```
+
+You can also upload avatar from file:
+
+```js
+fileHelper.fromFile('avatar.png')
+  .then((avatar) => {
+    console.log('Avatar uploaded!')
+
+  }).catch((error) => {
+    console.error(error.message)
+  })
+```
+
+#### URL operations
+
+URL operations are possible with `UrlHelper` class:
+
+```js
+const UrlHelper = require('ethavatar').urlHelper
+const urlHelper = new UrlHelper(ethavatar)
+```
+
+You can then post avatar as multipart form data:
+
+```js
+fileHelper.toUrl('https://example.com/', '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
+  .then((avatar) => {
+    console.log('Avatar downloaded!')
+
+  }).catch((error) => {
+    console.error(error.message)
+  })
+```
+
+The request will have ``multipart/form-data`` content type and include `address` and `avatar` form values. You should currently left trim (remove whitespaces and new lines) them because of the bug.
+
+You can also get avatar from URL:
+
+```js
+fileHelper.fromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg')
+  .then((avatar) => {
+    console.log('Avatar uploaded!')
+
+  }).catch((error) => {
+    console.error(error.message)
+  })
+```
+
+#### Other Examples
+
+You could also look to [`example.js`][link-example] or [API documentation][link-documentation]. Source code of [console application][link-console] is also great way to learn how this works.
 
 ## Built With
 * [Ethereum][link-ethereum]
@@ -231,4 +311,5 @@ This project is licensed under the MIT license. See the [`LICENSE`][link-license
 [link-license]: https://github.com/filips123/ethavatar.js/blob/master/LICENSE/
 [link-example]: https://github.com/filips123/ethavatar.js/blob/master/example.js/
 [link-documentation]: https://filips123.github.io/EthAvatar.JS/
+[link-console]: https://github.com/filips123/EthAvatar.JS/blob/master/src/console.js/
 [link-contributing]: https://github.com/filips123/ethavatar.js/blob/master/CONTRIBUTING.md
