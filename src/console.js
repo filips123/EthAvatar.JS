@@ -9,9 +9,11 @@ const program = require('commander')
 const settings = require('user-settings').file('.ethavatar')
 
 const URL = require('url')
-const fs = require('fs')
 
-const EthAvatar = require('./index.js')
+const EthAvatar = require('./client.js')
+const FileHelper = require('./helpers/file.js')
+
+const { version } = require('../package.json')
 
 let config = (optional) => {
   if (typeof optional.web3 === 'string') {
@@ -66,32 +68,17 @@ let get = (required, optional) => {
   }
 
   const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
+  const fileHelper = new FileHelper(ethavatar)
 
-  ethavatar.get(address)
-    .then((avatar) => {
-      if (typeof avatar === 'undefined') {
-        throw new Error('Avatar of address not set')
-      } else {
-        return avatar
-      }
-    }).then((avatar) => {
-      fs.writeFile(
-        required,
-        avatar,
-        'binary',
-        (err) => {
-          if (err) {
-            throw err
-          } else {
-            process.stdout.write(`Avatar of address ${address} has been written to file ${required}`)
-            process.exit(0)
-          }
-        }
-      )
-    }).catch((error) => {
-      process.stderr.write(error.message)
-      process.exit(1)
-    })
+  try {
+    fileHelper.toFile(required, address)
+  } catch (error) {
+    process.stderr.write(error.message)
+    process.exit(1)
+  }
+
+  process.stdout.write(`Avatar of address ${address} has been written to file ${required}`)
+  process.exit(0)
 }
 
 let set = (required, optional) => {
@@ -120,29 +107,21 @@ let set = (required, optional) => {
   }
 
   const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
+  const fileHelper = new FileHelper(ethavatar)
 
-  fs.readFile(
-    required,
-    (err, data) => {
-      if (err) {
-        process.stderr.write(err.message)
-        process.exit(1)
-      } else {
-        ethavatar.set(Buffer.from(data))
-          .then(() => {
-            process.stdout.write(`Avatar of address ${web3Connection.eth.accounts[0]} from file ${required} has been uploaded to blockchain`)
-            process.exit(0)
-          }).catch((error) => {
-            process.stderr.write(error.message)
-            process.exit(1)
-          })
-      }
-    }
-  )
+  try {
+    fileHelper.fromFile(required)
+  } catch (error) {
+    process.stderr.write(error.message)
+    process.exit(1)
+  }
+
+  process.stdout.write(`Avatar of address ${web3Connection.eth.accounts[0]} from file ${required} has been uploaded to blockchain`)
+  process.exit(0)
 }
 
 program
-  .version('1.0.0-beta.4')
+  .version(version)
   .description('JavaScript API for EthAvatar')
 
 program
