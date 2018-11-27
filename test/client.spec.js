@@ -1,4 +1,9 @@
-/* eslint-disable */
+/* eslint-env mocha */
+/* eslint no-new: 0 */
+/* eslint dot-notation: 0 */
+/* global ethavatar:true */
+/* global web3:true */
+/* global ipfs:true */
 
 'use strict'
 
@@ -7,7 +12,7 @@ const assert = require('chai').assert
 const Web3 = require('web3')
 const IpfsAPI = require('ipfs-api')
 
-const EthAvatar = require('../src/index.js')
+const EthAvatar = require('../src/client.js')
 
 describe('EthAvatar', function () {
   this.timeout(15000)
@@ -70,19 +75,14 @@ describe('EthAvatar', function () {
     })
 
     it('should construct using specified contract address', async function () {
-      let contract = require ('../src/EthAvatar.json')
+      let contract = require('../src/data/EthAvatar.json')
       let address = contract['networks'][web3.version.network]['address']
 
       new EthAvatar(null, null, address)
     })
   })
 
-  describe('#get()', function () {
-    before(async function () {
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
-      await ethavatar.set(avatar)
-    })
-
+  describe('#_address()', function () {
     it('should enable privacy (EIP-1102) Web3 provider', async function () {
       global.ethereum = global.web3.currentProvider
       global.ethereum.enable = async () => {
@@ -90,9 +90,25 @@ describe('EthAvatar', function () {
       }
 
       let ethavatar = new EthAvatar()
-      await ethavatar.get()
+      await ethavatar._address()
 
       delete global.ethereum
+    })
+
+    it('should get correct default Ethereum address', async function () {
+      let ethavatar = new EthAvatar()
+
+      let expected = web3.eth.accounts[0]
+      let actual = await ethavatar._address()
+
+      assert.strictEqual(actual, expected, 'Default Ethereum address is not correct')
+    })
+  })
+
+  describe('#get()', function () {
+    before(async function () {
+      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      await ethavatar.set(avatar)
     })
 
     it('should not get avatar that not exists', async function () {
@@ -110,19 +126,6 @@ describe('EthAvatar', function () {
   })
 
   describe('#set()', function () {
-    it('should enable privacy (EIP-1102) Web3 provider', async function () {
-      global.ethereum = global.web3.currentProvider
-      global.ethereum.enable = async () => {
-        return true
-      }
-
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
-      let ethavatar = new EthAvatar()
-      await ethavatar.set(avatar)
-
-      delete global.ethereum
-    })
-
     it('should set avatar', async function () {
       let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
@@ -135,22 +138,10 @@ describe('EthAvatar', function () {
   })
 
   describe('#remove()', function () {
-    it('should enable privacy (EIP-1102) Web3 provider', async function () {
-      global.ethereum = global.web3.currentProvider
-      global.ethereum.enable = async () => {
-        return true
-      }
-
-      let ethavatar = new EthAvatar()
-      await ethavatar.remove()
-
-      delete global.ethereum
-    })
-
     it('should remove avatar', async function () {
       await ethavatar.remove()
 
-      let expected = undefined
+      let expected
       let actual = await ethavatar.get()
 
       assert.strictEqual(actual, expected, 'Avatar is not correctly removed')
@@ -158,18 +149,6 @@ describe('EthAvatar', function () {
   })
 
   describe('#watch()', function () {
-    it('should enable privacy (EIP-1102) Web3 provider', async function () {
-      global.ethereum = global.web3.currentProvider
-      global.ethereum.enable = async () => {
-        return true
-      }
-
-      let ethavatar = new EthAvatar()
-      ethavatar.watch((result) => { return true })
-
-      delete global.ethereum
-    })
-
     it('should watch for avatar changes', async function () {
       ethavatar.watch(async (result) => {
         let expected = web3.eth.accounts[0]
