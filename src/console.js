@@ -53,12 +53,12 @@ let get = (required, optional) => {
 
   if (typeof optional.ipfs === 'string') {
     let ipfsURL = new URL(optional.ipfs)
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, {protocol: ipfsURL.protocol})
+    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
   } else if (typeof settings.get('ipfs') !== 'undefined') {
     let ipfsURL = new URL(settings.get('ipfs'))
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, {protocol: ipfsURL.protocol})
+    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
   } else {
-    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
+    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
   }
 
   if (typeof optional.address === 'string') {
@@ -98,12 +98,12 @@ let set = (required, optional) => {
 
   if (typeof optional.ipfs === 'string') {
     let ipfsURL = new URL(optional.ipfs)
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, {protocol: ipfsURL.protocol})
+    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
   } else if (typeof settings.get('ipfs') !== 'undefined') {
     let ipfsURL = new URL(settings.get('ipfs'))
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, {protocol: ipfsURL.protocol})
+    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
   } else {
-    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', {protocol: 'https'})
+    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
   }
 
   const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
