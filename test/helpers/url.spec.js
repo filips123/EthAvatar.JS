@@ -50,11 +50,11 @@ describe('UrlHelper', function () {
       let request = requestsData['data'][requestsData.to - 1]['request']
 
       let expectedAddress = await ethavatar._address()
-      let actualAddress = request.address.trimStart()
+      let actualAddress = request.address.replace(/^\s*/, '')
       assert.strictEqual(actualAddress, expectedAddress, 'Default Ethereum address is not correct')
 
       let expectedAvatar = await ethavatar.get()
-      let actualAvatar = Buffer.from(request.avatar.trimStart())
+      let actualAvatar = Buffer.from(request.avatar.replace(/^\s*/, ''))
 
       assert(Buffer.compare(expectedAvatar, actualAvatar) === 0, 'Avatar is not correctly uploaded from URL')
     })
