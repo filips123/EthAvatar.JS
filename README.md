@@ -75,7 +75,7 @@ $ ethavatar config --web3 http://127.0.0.1:8545/
 $ ethavatar config --ipfs https://ipfs.infura.io:5001/
 ```
 
-Program will save them in `~/.ethavatar` file. Web3 connection is required and only HTTP provider is supported. IPFS connection is optional and it uses Infura IPFS API by default.
+Program will save them in `~/.ethavatar` file. Web3 connection is required and all providers are supported. IPFS connection is optional and it uses Infura IPFS API by default.
 
 You can get avatar to file using `ethavatar get <filename>`:
 

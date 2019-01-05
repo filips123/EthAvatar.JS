@@ -5,7 +5,7 @@
 
 const Web3 = require('web3')
 const TruffleContract = require('truffle-contract')
-const IpfsAPI = require('ipfs-api')
+const IpfsClient = require('ipfs-http-client')
 
 const EthAvatarContract = require('./data/EthAvatar')
 
@@ -57,7 +57,7 @@ class EthAvatar {
 
     // Get IPFS connection
     if (ipfsConn === null) {
-      this.ipfs = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
+      this.ipfs = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
     } else {
       this.ipfs = ipfsConn
     }
@@ -102,8 +102,9 @@ class EthAvatar {
     }
 
     // Get Ethereum address
-    if (typeof this.web3.eth.accounts[0] !== 'undefined') {
-      return this.web3.eth.accounts[0]
+    let accounts = await this.web3.eth.getAccounts()
+    if (typeof accounts[0] !== 'undefined') {
+      return accounts[0]
     } else /* istanbul ignore next */ {
       throw new DefaultAddressNotFoundError('Default Ethereum address not found')
     }
@@ -137,11 +138,11 @@ class EthAvatar {
       }
 
       // Get avatar data from IPFS
-      let result = await this.ipfs.files.get(hash)
+      let result = await this.ipfs.get(hash)
       let data = JSON.parse(Buffer.from(result[0].content).toString())
 
       // Get avatar image from IPFS
-      let avatar = await this.ipfs.files.get(data.imageHash)
+      let avatar = await this.ipfs.get(data.imageHash)
       let image = avatar[0].content
 
       // Return image
@@ -172,11 +173,11 @@ class EthAvatar {
     // Set avatar
     try {
       // Set avatar image to IPFS
-      let imageHash = (await this.ipfs.files.add(buffer))[0].hash
+      let imageHash = (await this.ipfs.add(buffer))[0].hash
 
       // Set avatar data to IPFS
       let dataBuffer = Buffer.from(JSON.stringify({ imageHash: imageHash }))
-      let dataHash = (await this.ipfs.files.add(dataBuffer))[0].hash
+      let dataHash = (await this.ipfs.add(dataBuffer))[0].hash
 
       // Set avatar hash to contract
       await this.instance.setIPFSHash(dataHash, { from: address })
@@ -233,10 +234,10 @@ class EthAvatar {
         }
 
         // Get contract event
-        const event = this.instance.DidSetIPFSHash()
+        const event = this.instance.DidSetIPFSHash
 
         // Watch for changes
-        event.watch((error, result) => {
+        event((error, result) => {
           if (!error) {
             if (result.args.hashAddress === address) {
               callback(result.args)

@@ -10,7 +10,7 @@ const assert = require('chai').assert
 const axios = require('axios')
 
 const Web3 = require('web3')
-const IpfsAPI = require('ipfs-api')
+const IpfsClient = require('ipfs-http-client')
 
 const EthAvatar = require('../../src/client.js')
 const UrlHelper = require('../../src/helpers/url.js')
@@ -22,7 +22,7 @@ describe('UrlHelper', function () {
     const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')
     const web3Connection = new Web3(web3Provider)
 
-    const ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
+    const ipfsConnection = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
 
     global.web3 = web3Connection
     global.ipfs = ipfsConnection

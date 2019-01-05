@@ -10,7 +10,7 @@
 const assert = require('chai').assert
 
 const Web3 = require('web3')
-const IpfsAPI = require('ipfs-api')
+const IpfsClient = require('ipfs-http-client')
 
 const EthAvatar = require('../src/client.js')
 
@@ -21,7 +21,7 @@ describe('EthAvatar', function () {
     const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')
     const web3Connection = new Web3(web3Provider)
 
-    const ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
+    const ipfsConnection = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
 
     global.web3 = web3Connection
     global.ipfs = ipfsConnection
@@ -75,8 +75,9 @@ describe('EthAvatar', function () {
     })
 
     it('should construct using specified contract address', async function () {
+      let network = await web3.eth.net.getId()
       let contract = require('../src/data/EthAvatar.json')
-      let address = contract['networks'][web3.version.network]['address']
+      let address = contract['networks'][network]['address']
 
       new EthAvatar(null, null, address)
     })
@@ -98,7 +99,7 @@ describe('EthAvatar', function () {
     it('should get correct default Ethereum address', async function () {
       let ethavatar = new EthAvatar()
 
-      let expected = web3.eth.accounts[0]
+      let expected = (await web3.eth.getAccounts())[0]
       let actual = await ethavatar._address()
 
       assert.strictEqual(actual, expected, 'Default Ethereum address is not correct')

@@ -3,7 +3,7 @@
 'use strict'
 
 const Web3 = require('web3')
-const IpfsAPI = require('ipfs-api')
+const IpfsClient = require('ipfs-http-client')
 
 const program = require('commander')
 const settings = require('user-settings').file('.ethavatar')
@@ -14,6 +14,54 @@ const EthAvatar = require('./client.js')
 const FileHelper = require('./helpers/file.js')
 
 const { version } = require('../package.json')
+
+let __getWeb3Connection = (required, optional) => {
+  let web3Connection
+
+  try {
+    if (typeof optional.web3 === 'string') {
+      web3Connection = new Web3(optional.web3)
+    } else if (typeof settings.get('web3') !== 'undefined') {
+      web3Connection = new Web3(settings.get('web3'))
+    } else {
+      process.stderr.write('Web3 connection not specified!')
+      process.exit(1)
+    }
+  } catch (error) {
+    process.stderr.write(error.message)
+    process.exit(1)
+  }
+
+  return web3Connection
+}
+
+let __getIpfsConnection = (required, optional) => {
+  let ipfsConnection
+
+  try {
+    if (typeof optional.ipfs === 'string') {
+      let ipfsURL = new URL(optional.ipfs)
+      ipfsConnection = IpfsClient(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
+    } else if (typeof settings.get('ipfs') !== 'undefined') {
+      let ipfsURL = new URL(settings.get('ipfs'))
+      ipfsConnection = IpfsClient(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
+    } else {
+      ipfsConnection = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
+    }
+  } catch (error) {
+    process.stderr.write(error.message)
+    process.exit(1)
+  }
+
+  return ipfsConnection
+}
+
+let __getFileHelper = (web3Connection, ipfsConnection) => {
+  const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
+  const fileHelper = new FileHelper(ethavatar)
+
+  return fileHelper
+}
 
 let config = (optional) => {
   if (typeof optional.web3 === 'string') {
@@ -31,47 +79,25 @@ let config = (optional) => {
   let web3Conn = typeof settings.get('web3') !== 'undefined' ? settings.get('web3') : 'Not set'
   let ipfsConn = typeof settings.get('ipfs') !== 'undefined' ? settings.get('ipfs') : 'Not set'
 
-  process.stdout.write('Current Web3 connection: ' + web3Conn)
+  process.stdout.write('Current Web3 connection: ' + web3Conn + '\n')
   process.stdout.write('Current IPFS connection: ' + ipfsConn)
 }
 
-let get = (required, optional) => {
-  let web3Connection
-  let ipfsConnection
+let get = async (required, optional) => {
+  const web3Connection = __getWeb3Connection(required, optional)
+  const ipfsConnection = __getIpfsConnection(required, optional)
+
+  const fileHelper = __getFileHelper(web3Connection, ipfsConnection)
+
   let address
-
-  if (typeof optional.web3 === 'string') {
-    let web3Provider = new Web3.providers.HttpProvider(optional.web3)
-    web3Connection = new Web3(web3Provider)
-  } else if (typeof settings.get('web3') !== 'undefined') {
-    let web3Provider = new Web3.providers.HttpProvider(settings.get('web3'))
-    web3Connection = new Web3(web3Provider)
-  } else {
-    process.stderr.write('Web3 connection not specified!')
-    process.exit(1)
-  }
-
-  if (typeof optional.ipfs === 'string') {
-    let ipfsURL = new URL(optional.ipfs)
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
-  } else if (typeof settings.get('ipfs') !== 'undefined') {
-    let ipfsURL = new URL(settings.get('ipfs'))
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
-  } else {
-    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
-  }
-
   if (typeof optional.address === 'string') {
     address = optional.address
   } else {
-    address = web3Connection.eth.accounts[0]
+    address = (await web3Connection.eth.getAccounts())[0]
   }
 
-  const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
-  const fileHelper = new FileHelper(ethavatar)
-
   try {
-    fileHelper.toFile(required, address)
+    await fileHelper.toFile(required, address)
   } catch (error) {
     process.stderr.write(error.message)
     process.exit(1)
@@ -81,42 +107,22 @@ let get = (required, optional) => {
   process.exit(0)
 }
 
-let set = (required, optional) => {
-  let web3Connection
-  let ipfsConnection
+let set = async (required, optional) => {
+  const web3Connection = __getWeb3Connection(required, optional)
+  const ipfsConnection = __getIpfsConnection(required, optional)
 
-  if (typeof optional.web3 === 'string') {
-    let web3Provider = new Web3.providers.HttpProvider(optional.web3)
-    web3Connection = new Web3(web3Provider)
-  } else if (typeof settings.get('web3') !== 'undefined') {
-    let web3Provider = new Web3.providers.HttpProvider(settings.get('web3'))
-    web3Connection = new Web3(web3Provider)
-  } else {
-    process.stderr.write('Web3 connection not specified!')
-    process.exit(1)
-  }
-
-  if (typeof optional.ipfs === 'string') {
-    let ipfsURL = new URL(optional.ipfs)
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
-  } else if (typeof settings.get('ipfs') !== 'undefined') {
-    let ipfsURL = new URL(settings.get('ipfs'))
-    ipfsConnection = IpfsAPI(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
-  } else {
-    ipfsConnection = IpfsAPI('ipfs.infura.io', '5001', { protocol: 'https' })
-  }
-
-  const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
-  const fileHelper = new FileHelper(ethavatar)
+  const fileHelper = __getFileHelper(web3Connection, ipfsConnection)
 
   try {
-    fileHelper.fromFile(required)
+    await fileHelper.fromFile(required)
   } catch (error) {
     process.stderr.write(error.message)
     process.exit(1)
   }
 
-  process.stdout.write(`Avatar of address ${web3Connection.eth.accounts[0]} from file ${required} has been uploaded to blockchain`)
+  let address = (await web3Connection.eth.getAccounts())[0]
+
+  process.stdout.write(`Avatar of address ${address} from file ${required} has been uploaded to blockchain`)
   process.exit(0)
 }
 
