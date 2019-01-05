@@ -29,6 +29,9 @@ coverage/
 build/
 dist/
 
+# Generated documentation
+docs/
+
 # Dependency directories
 bower_components/
 node_modules/

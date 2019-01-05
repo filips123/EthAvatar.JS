@@ -37,35 +37,26 @@ script:
   # Display coverage
   - yarn coverage 2> /dev/null | sed -n -e '/----------/,$p' | sed \$d
 
-after_success:
-  # Set Git user and branch
-  - git config --global user.email "travis@travis-ci.com"
-  - git config --global user.name "Travis CI"
-  - git checkout -qf master
+before_deploy:
+  # Remove smart contract changes
+  - git checkout -- $TRAVIS_BUILD_DIR/src/data/EthAvatar.json
 
-  # Update smart contract
-  - wget https://raw.githubusercontent.com/gitcoinco/ethavatar/master/build/contracts/EthAvatar.json -O src/data/EthAvatar.json
-  - git add src/data/EthAvatar.json
-  - git commit -m "[ci skip] Update smart contract"
-
-  # Build documentation
+  # Make documentation and build code
   - yarn docs
-  - git add docs
-  - git commit -m "[ci skip] Build documentation"
-
-  # Publish to GitHub
-  - |
-    if [[ ${TRAVIS_NODE_VERSION:0:2} == "10" ]]
-    then
-      git push --set-upstream https://${GH_TOKEN}@github.com/filips123/EthAvatar.JS.git master > /dev/null 2>&1 && echo Code published successfully || echo Error while publishing code
-    fi
+  - yarn build
 
 deploy:
-  provider: script
-  skip_cleanup: true
-  on:
-    tags: true
-  script:
-    - printf "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > $HOME/.npmrc
-    - yarn build
-    - yarn publish --non-interactive
+  - provider: pages
+    skip_cleanup: true
+    on:
+      branch: master
+    github_token: $GH_TOKEN
+    local_dir: docs
+
+  - provider: script
+    skip_cleanup: true
+    on:
+      tags: true
+    script:
+      - printf "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > $HOME/.npmrc
+      - yarn publish --non-interactive
