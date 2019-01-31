@@ -17,7 +17,7 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 
 * **Visual Verification:** When sending ether to an exchange for instance, instead of being paranoid if you've pasted the correct address, wallets that support Eth Avatar will be able to fetch the exchange logo as a forms of visual verification. The same also works the other way around when transferring from the exchange to your own wallet.
 * **Token Branding:** Tokens and contracts will be able to associate branding artwork to their addresses, allowing it to be possibly visible on EtherScan and exchanges once they support Eth Avatar.
-* **Personal Use** It's fun to associate avatars with your personal addresses and be able to visually differentiate between them in your wallets.
+* **Personal Use:** It's fun to associate avatars with your personal addresses and be able to visually differentiate between them in your wallets.
 
 ### TODO
 
@@ -32,7 +32,7 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 
 ### Using NPM or Yarn
 
-EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or  [*Yarn*][link-yarn]. It is recommended to use *Node.js 8 LTS* or *Node.js 10*, because it could not work stable with other versions.
+EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or [*Yarn*][link-yarn]. Only *Node.js 10 LTS* and *Node.js 11* are supported.
 
 You could globally install EthAvatar.JS to get command line interface:
 

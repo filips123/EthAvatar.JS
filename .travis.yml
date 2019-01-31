@@ -1,14 +1,13 @@
 language: node_js
 
 node_js:
-  - 8
   - 10
   - 11
 
 cache: yarn
 
 before_install:
-  - travis_retry yarn global add aegir truffle ganache-cli
+  - travis_retry yarn global add aegir@18 truffle@4 ganache-cli@6
 
 install:
   - travis_retry yarn install

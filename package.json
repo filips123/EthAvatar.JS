@@ -24,6 +24,9 @@
     "type": "git",
     "url": "https://github.com/filips123/ethavatar.js.git"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "dependencies": {
     "web3": "1.0.0-beta.37",
     "truffle-contract": "4.x",
