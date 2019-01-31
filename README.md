@@ -3,6 +3,13 @@
 EthAvatar.JS
 ============
 
+[![Stable Version][icon-stable-version]][link-package]
+[![Unstable Version][icon-unstable-version]][link-package]
+[![Downloads][icon-downloads]][link-package]
+[![License][icon-license]][link-license]
+[![Node.js][icon-nodejs]][link-nodejs]
+[![Build Status][icon-travis]][link-travis]
+
 EthAvatar.JS is a JavaScript API for EthAvatar.
 
 ## Description
@@ -293,9 +300,16 @@ Please read [`CONTRIBUTING.md`][link-contributing] for details.
 This project uses [SemVer][link-semver] for versioning. For the versions available, see the [tags on this repository][link-tags].
 
 ## License
-This project is licensed under the MIT license. See the [`LICENSE`][link-license] file for details.
+This project is licensed under the MIT license. See the [`LICENSE`][link-license-file] file for details.
 
 [icon-logo]: https://screenshotscdn.firefoxusercontent.com/images/ea73525d-a516-4795-b5f3-8ad967d9a324.png
+
+[icon-stable-version]: https://img.shields.io/npm/v/ethavatar/latest.svg?style=flat-square&label=Stable+Version
+[icon-unstable-version]: https://img.shields.io/npm/v/ethavatar/beta.svg?style=flat-square&label=Unstable+Version
+[icon-downloads]: https://img.shields.io/npm/dt/ethavatar.svg?style=flat-square&label=Downloads
+[icon-license]: https://img.shields.io/npm/l/ethavatar.svg?style=flat-square&label=License
+[icon-nodejs]: https://img.shields.io/node/v/ethavatar.svg?style=flat-square&label=Node.js
+[icon-travis]: https://img.shields.io/travis/com/filips123/EthAvatar.JS.svg?style=flat-square&label=Build+Status
 
 [link-ethavatar]: https://github.com/gitcoinco/ethavatar/
 [link-contract]: https://etherscan.io/address/0x4FbF2f1613Cc86314b22AE10Ae95D19cF2990824/
@@ -307,8 +321,13 @@ This project is licensed under the MIT license. See the [`LICENSE`][link-license
 [link-npm]: https://www.npmjs.com/
 [link-yarn]: https://yarnpkg.com/
 [link-semver]: https://semver.org/
+[link-license]: https://choosealicense.com/licenses/mit/
+
+[link-package]: https://www.npmjs.com/package/ethavatar/
+[link-travis]: https://travis-ci.com/filips123/EthAvatar.JS/
+
 [link-tags]: https://github.com/filips123/ethavatar.js/tags/
-[link-license]: https://github.com/filips123/ethavatar.js/blob/master/LICENSE/
+[link-license-file]: https://github.com/filips123/ethavatar.js/blob/master/LICENSE/
 [link-example]: https://github.com/filips123/ethavatar.js/blob/master/example.js/
 [link-documentation]: https://filips123.github.io/EthAvatar.JS/
 [link-console]: https://github.com/filips123/EthAvatar.JS/blob/master/src/console.js/
