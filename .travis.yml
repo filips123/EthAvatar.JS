@@ -7,7 +7,7 @@ node_js:
 cache: yarn
 
 before_install:
-  - travis_retry yarn global add aegir@18 truffle@4 ganache-cli@6
+  - travis_retry yarn global add aegir@17 truffle@4 ganache-cli@6
 
 install:
   - travis_retry yarn install

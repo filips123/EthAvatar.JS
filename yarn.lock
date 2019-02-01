@@ -1196,10 +1196,10 @@ acorn@^6.0.2:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.0.4.tgz#77377e7353b72ec5104550aa2d2097a2fd40b754"
 
-aegir@^18.0.0:
-  version "18.0.3"
-  resolved "https://registry.yarnpkg.com/aegir/-/aegir-18.0.3.tgz#bf6866c5c973e04163b729126a12ed6d3ee2e66d"
-  integrity sha512-o31I84kCxTpfh3L/QkO+DQyJZRggl1/wRgBO2K7Rry+TKhhylFi8KDCzlbS2b8EPBDzvb9t6UIbTCoBBRqVEnQ==
+aegir@^17.0.0:
+  version "17.1.1"
+  resolved "https://registry.yarnpkg.com/aegir/-/aegir-17.1.1.tgz#1f2e44c8fad894eacfd92bdfe2813440368ba63f"
+  integrity sha512-YYsF+Fvl8An+tz1Z1s+LG2gFMiuQ+iuUlYr4hggfEyLc7ALIwJWSe5cdoMP0h0pSnQbYXTPUDYnlv5s2HXehEw==
   dependencies:
     "@babel/cli" "7.1.2"
     "@babel/core" "7.1.2"
@@ -1258,7 +1258,6 @@ aegir@^18.0.0:
     lodash "^4.17.11"
     mocha "^5.2.0"
     mocha-jenkins-reporter "~0.4.1"
-    npm-package-json-lint "^3.4.1"
     npm-which "^3.0.1"
     nyc "^13.1.0"
     p-map "^2.0.0"
@@ -1272,7 +1271,6 @@ aegir@^18.0.0:
     simple-git "^1.105.0"
     stats-webpack-plugin "~0.7.0"
     stream-http "^3.0.0"
-    terser-webpack-plugin "^1.1.0"
     through "^2.3.8"
     transform-loader "~0.2.4"
     uglify-es "^3.3.9"
@@ -1313,16 +1311,6 @@ ajv@^5.1.1:
 ajv@^6.1.0, ajv@^6.5.3, ajv@^6.5.5:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
-  dependencies:
-    fast-deep-equal "^2.0.1"
-    fast-json-stable-stringify "^2.0.0"
-    json-schema-traverse "^0.4.1"
-    uri-js "^4.2.2"
-
-ajv@^6.5.4:
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.2.tgz#caceccf474bf3fc3ce3b147443711a24063cc30d"
-  integrity sha512-FBHEW6Jf5TB9MGBgUUA9XHkTbjXYfAUjY43ACMfmdMRHniyoMHjHjzD50OK8LGDWQwp4rWEsIq5kEqq7rvIM1g==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -6116,11 +6104,6 @@ ipld-dag-pb@~0.15.0:
     pull-traverse "^1.0.3"
     stable "~0.1.8"
 
-irregular-plurals@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/irregular-plurals/-/irregular-plurals-2.0.0.tgz#39d40f05b00f656d0b7fa471230dd3b714af2872"
-  integrity sha512-Y75zBYLkh0lJ9qxeHlMjQ7bSbyiSqNW/UOPWDmzC7cXskL1hekSITh1Oc6JV0XCWWZ9DE8VYSB71xocLk3gmGw==
-
 is-absolute@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-absolute/-/is-absolute-1.0.0.tgz#395e1ae84b11f26ad1795e73c17378e48a301576"
@@ -6386,13 +6369,6 @@ is-path-inside@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-path-inside/-/is-path-inside-1.0.1.tgz#8ef5b7de50437a3fdca6b4e865ef7aa55cb48036"
   dependencies:
     path-is-inside "^1.0.1"
-
-is-path-inside@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/is-path-inside/-/is-path-inside-2.0.0.tgz#28f249020fe6906671fe31a76118f2cd490441fd"
-  integrity sha512-OmUXvSq+P7aI/aRbl1dzwdlyLn8vW7Nr2/11S7y/dcLLgnQ89hgYJp7tfc+A5SRid3rNCLpruOp2CAV68/iOcA==
-  dependencies:
-    path-is-inside "^1.0.2"
 
 is-plain-obj@^1.0.0, is-plain-obj@^1.1.0:
   version "1.1.0"
@@ -7240,13 +7216,6 @@ log-symbols@^1.0.2:
   dependencies:
     chalk "^1.0.0"
 
-log-symbols@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-2.2.0.tgz#5740e1c5d6f0dfda4ad9323b5332107ef6b4c40a"
-  integrity sha512-VeIAFslyIerEJLXHziedo2basKbMKtTw3vfn5IzG0XTjhAVEJyNHnL2p7vc+wBDSdQuUpNw3M2u6xb9QsAY5Eg==
-  dependencies:
-    chalk "^2.0.1"
-
 log-update@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/log-update/-/log-update-2.3.0.tgz#88328fd7d1ce7938b29283746f0b1bc126b24708"
@@ -7482,21 +7451,6 @@ meow@^4.0.0:
     read-pkg-up "^3.0.0"
     redent "^2.0.0"
     trim-newlines "^2.0.0"
-
-meow@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/meow/-/meow-5.0.0.tgz#dfc73d63a9afc714a5e371760eb5c88b91078aa4"
-  integrity sha512-CbTqYU17ABaLefO8vCU153ZZlprKYWDljcndKKDCFcYQITzWCXZAVk4QMFZPgvzrnUQ3uItnIE/LoUOwrT15Ig==
-  dependencies:
-    camelcase-keys "^4.0.0"
-    decamelize-keys "^1.0.0"
-    loud-rejection "^1.0.0"
-    minimist-options "^3.0.1"
-    normalize-package-data "^2.3.4"
-    read-pkg-up "^3.0.0"
-    redent "^2.0.0"
-    trim-newlines "^2.0.0"
-    yargs-parser "^10.0.0"
 
 merge-descriptors@1.0.1:
   version "1.0.1"
@@ -8083,24 +8037,6 @@ now-and-later@^2.0.0:
 npm-bundled@^1.0.1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.5.tgz#3c1732b7ba936b3a10325aef616467c0ccbcc979"
-
-npm-package-json-lint@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/npm-package-json-lint/-/npm-package-json-lint-3.4.1.tgz#7a5cc61d2f35f4811e45bed2536e774f6dbbe4ab"
-  integrity sha512-W4xlmeFRAY34GQoHUywqoI3PxVZ0hugjbZLiGnVgFjgmvRRcmxKwwmubMe0lAD78vgOHgJZRGubdVXwkp9d3QA==
-  dependencies:
-    ajv "^6.5.4"
-    chalk "^2.4.1"
-    glob "^7.1.3"
-    is-path-inside "^2.0.0"
-    is-plain-obj "^1.1.0"
-    is-resolvable "^1.1.0"
-    log-symbols "^2.2.0"
-    meow "^5.0.0"
-    plur "^3.0.1"
-    semver "^5.6.0"
-    strip-json-comments "^2.0.1"
-    validator "^10.8.0"
 
 npm-packlist@^1.1.6:
   version "1.1.12"
@@ -8769,13 +8705,6 @@ pkg-dir@^3.0.0:
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-3.0.0.tgz#2749020f239ed990881b1f71210d51eb6523bea3"
   dependencies:
     find-up "^3.0.0"
-
-plur@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/plur/-/plur-3.0.1.tgz#268652d605f816699b42b86248de73c9acd06a7c"
-  integrity sha512-lJl0ojUynAM1BZn58Pas2WT/TXeC1+bS+UqShl0x9+49AtOn7DixRXVzaC8qrDOIxNDmepKnLuMTH7NQmkX0PA==
-  dependencies:
-    irregular-plurals "^2.0.0"
 
 pluralize@^7.0.0:
   version "7.0.0"
@@ -11141,11 +11070,6 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-validator@^10.8.0:
-  version "10.10.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-10.10.0.tgz#a69ac298149f063a44361cb52182edb52dab59a4"
-  integrity sha512-DyZyLJlMXM3CGdVaVHE/EDzCagMRoPI3mmGdxxNQbqkGqh56+M3d1i0ZAWd69En8U21DHbPTn12aOdhO+hfm5w==
-
 value-or-function@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/value-or-function/-/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
@@ -11833,13 +11757,6 @@ yaeti@^0.0.6:
 yallist@^3.0.0, yallist@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.0.3.tgz#b4b049e314be545e3ce802236d6cd22cd91c3de9"
-
-yargs-parser@^10.0.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-10.1.0.tgz#7202265b89f7e9e9f2e5765e0fe735a905edbaa8"
-  integrity sha512-VCIyR1wJoEBZUqk5PA+oOBF6ypbwh5aNB3I50guxAL/quggdfs4TtNHQrSazFA3fYZ+tEqfs0zIGlv0c/rgjbQ==
-  dependencies:
-    camelcase "^4.1.0"
 
 yargs-parser@^11.0.0, yargs-parser@^11.1.1:
   version "11.1.1"

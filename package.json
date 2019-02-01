@@ -39,7 +39,7 @@
     "form-data": "2.x"
   },
   "devDependencies": {
-    "aegir": "^18.0.0"
+    "aegir": "^17.0.0"
   },
   "scripts": {
     "build": "aegir build",
