@@ -56,6 +56,7 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+      node: 11
     script:
       - printf "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > $HOME/.npmrc
       - yarn publish --non-interactive
