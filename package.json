@@ -17,6 +17,7 @@
   "main": "src/index.js",
   "unpkg": "dist/ethavatar.min.js",
   "jsdelivr": "dist/ethavatar.min.js",
+  "runkitExampleFilename": "example.js",
   "bin": {
     "ethavatar": "src/console.js"
   },
@@ -56,7 +57,9 @@
     "release:prerelease": "aegir release --type prerelease"
   },
   "files": [
-    "dist"
+    "src",
+    "dist",
+    "example.js"
   ],
   "eslintIgnore": [
     "example.js"
