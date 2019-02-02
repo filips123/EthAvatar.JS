@@ -47,6 +47,9 @@ before_deploy:
   - yarn docs
   - yarn build
 
+  # Use custom subdomain for docs
+  - echo 'ethavatar.js.org' > ./docs/CNAME
+
 deploy:
   - provider: pages
     skip_cleanup: true

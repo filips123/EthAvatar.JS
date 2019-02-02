@@ -329,6 +329,6 @@ This project is licensed under the MIT license. See the [`LICENSE`][link-license
 [link-tags]: https://github.com/filips123/ethavatar.js/tags/
 [link-license-file]: https://github.com/filips123/ethavatar.js/blob/master/LICENSE/
 [link-example]: https://github.com/filips123/ethavatar.js/blob/master/example.js/
-[link-documentation]: https://filips123.github.io/EthAvatar.JS/
+[link-documentation]: https://ethavatar.js.org/
 [link-console]: https://github.com/filips123/EthAvatar.JS/blob/master/src/console.js/
 [link-contributing]: https://github.com/filips123/ethavatar.js/blob/master/CONTRIBUTING.md
