@@ -40,6 +40,9 @@ before_deploy:
   # Remove smart contract changes
   - git checkout -- $TRAVIS_BUILD_DIR/src/data/EthAvatar.json
 
+  # Set latest tag as version
+  - npm version -no-git-tag-version $(git describe --abbrev=0 --tags)
+
   # Make documentation and build code
   - yarn docs
   - yarn build
