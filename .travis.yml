@@ -49,14 +49,14 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
+      node: 11
     github_token: $GH_TOKEN
     local_dir: docs
 
-  - provider: script
+  - provider: npm
     skip_cleanup: true
     on:
       tags: true
       node: 11
-    script:
-      - printf "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > $HOME/.npmrc
-      - yarn publish --non-interactive
+    email: $NPM_EMAIL
+    api_key: $NPM_TOKEN
