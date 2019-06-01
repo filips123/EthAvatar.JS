@@ -62,7 +62,7 @@ describe('UrlHelper', function () {
 
   describe('#fromUrl()', function () {
     it('should set avatar from URL', async function () {
-      let url = 'https://projects-static.raspberrypi.org/projects/minecraft-selfies/1ada2372088515811c63263ef3589ccf26509506/en/images/colour_map.png'
+      let url = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'
 
       const urlHelper = new UrlHelper(ethavatar)
       await urlHelper.fromUrl(url)
