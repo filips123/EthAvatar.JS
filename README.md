@@ -39,7 +39,7 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 
 ### Using NPM or Yarn
 
-EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or [*Yarn*][link-yarn]. Only *Node.js 10 LTS* and *Node.js 11* are supported.
+EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or [*Yarn*][link-yarn]. Only *Node.js 10 LTS* and *Node.js 11* are supported. It is *completely impossible* to use this package on *Node.js 12*, because of [Truffle and Web3 bug][link-truffle-bug]!
 
 You could globally install EthAvatar.JS to get command line interface:
 
@@ -332,3 +332,5 @@ This project is licensed under the MIT license. See the [`LICENSE`][link-license
 [link-documentation]: https://ethavatar.js.org/
 [link-console]: https://github.com/filips123/EthAvatar.JS/blob/master/src/console.js/
 [link-contributing]: https://github.com/filips123/ethavatar.js/blob/master/CONTRIBUTING.md
+
+[link-truffle-bug]: https://github.com/trufflesuite/truffle/issues/2070
