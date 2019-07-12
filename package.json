@@ -26,7 +26,7 @@
     "url": "https://github.com/filips123/ethavatar.js.git"
   },
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
     "web3": "1.0.0-beta.37",

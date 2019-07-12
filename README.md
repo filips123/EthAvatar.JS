@@ -39,7 +39,7 @@ The avatar image is stored on IPFS and is bound to your address via an Ethereum 
 
 ### Using NPM or Yarn
 
-EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or [*Yarn*][link-yarn]. It works with *Node.js 8.3.0 or later*, but it is recommended to use supported and maintained versions. Note that if you want to use it with *Node.js 12 or later*, you must use *Yarn* instead of *NPM* (because of [Truffle and Web3 bug][link-truffle-bug]).
+EthAvatar.JS requires [*Node.js*][link-nodejs] and [*NPM*][link-npm] or [*Yarn*][link-yarn]. It works with *Node.js 10 or later*, but it is recommended to use supported and maintained versions. Note that if you want to use it with *Node.js 12 or later*, you must use *Yarn* instead of *NPM* (because of [Truffle and Web3 bug][link-truffle-bug]).
 
 You could globally install EthAvatar.JS to get command line interface:
 
