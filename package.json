@@ -26,7 +26,7 @@
     "url": "https://github.com/filips123/ethavatar.js.git"
   },
   "engines": {
-    "node": ">=10.0.0 <12.0.0"
+    "node": ">=8.3.0"
   },
   "dependencies": {
     "web3": "1.0.0-beta.37",
@@ -40,6 +40,10 @@
   },
   "devDependencies": {
     "aegir": "^17.0.0"
+  },
+  "resolutions": {
+    "eth-lib/keccakjs/sha3": "^1.2.3",
+    "web3/web3-eth/web3-eth-accounts/scrypt.js": "^0.3.0"
   },
   "scripts": {
     "build": "aegir build",
