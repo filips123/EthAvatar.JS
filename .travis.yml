@@ -55,7 +55,7 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
-      node: 11
+      node: 12
     github_token: $GH_TOKEN
     local_dir: docs
 
@@ -63,6 +63,6 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      node: 11
+      node: 12
     email: $NPM_EMAIL
     api_key: $NPM_TOKEN
