@@ -84,6 +84,52 @@ describe('EthAvatar', function () {
   })
 
   describe('#_address()', function () {
+    it('should use provided Ethereum address', async function () {
+      let ethavatar = new EthAvatar()
+
+      let expected = '0x76aECE9DBF73C831ef1CAbE0b748531bec9d054E'
+      let actual = await ethavatar._address(expected)
+
+      assert.strictEqual(actual, expected, 'Provided Ethereum address is not correct')
+    })
+
+    it('should use provided ENS domain', async function () {
+      let ethavatar = new EthAvatar()
+      ethavatar.web3 = new Web3('https://cloudflare-eth.com')
+
+      let domain = 'ethereum.eth'
+
+      let expected = await ethavatar.web3.eth.ens.getAddress(domain)
+      let actual = await ethavatar._address(domain)
+
+      assert.strictEqual(actual, expected, 'Provided ENS domain is not correct')
+    })
+
+    it('should use not ENS on unsupported network', async function () {
+      let ethavatar = new EthAvatar()
+
+      let domain = 'ethereum.eth'
+
+      try {
+        await ethavatar._address(domain)
+      } catch (err) {
+        assert.strictEqual(err.message, 'Provided address invalid and ENS not supported', 'Program incorrectly use ENS on unsupported network')
+      }
+    })
+
+    it('should not use ENS on unexisting domain', async function () {
+      let ethavatar = new EthAvatar()
+      ethavatar.web3 = new Web3('https://cloudflare-eth.com')
+
+      let domain = 'this-domain-does-not-exist-on-mainnet-because-it-is-only-for-testing-of-unexisting-domains.eth'
+
+      try {
+        await ethavatar._address(domain)
+      } catch (err) {
+        assert.strictEqual(err.message, 'Provided address invalid and ENS domain not found', 'Program incorrectly use unexisting domain')
+      }
+    })
+
     it('should enable privacy (EIP-1102) Web3 provider', async function () {
       global.ethereum = global.web3.currentProvider
       global.ethereum.enable = async () => {

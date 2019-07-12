@@ -12,6 +12,7 @@ const EthAvatarContract = require('./data/EthAvatar')
 const Web3ProviderNotFoundError = require('./errors/Web3ProviderNotFoundError')
 const ContractNotFoundError = require('./errors/ContractNotFoundError')
 
+const InvalidAddressError = require('./errors/InvalidAddressError')
 const Web3NotAllowedError = require('./errors/Web3NotAllowedError')
 const DefaultAddressNotFoundError = require('./errors/DefaultAddressNotFoundError')
 
@@ -88,7 +89,25 @@ class EthAvatar {
     }
   }
 
-  async _address () {
+  async _address (address = null) {
+    if (address) {
+      if (this.web3.utils.isAddress(address)) {
+        return address
+      } else {
+        try {
+          address = await this.web3.eth.ens.getAddress(address)
+        } catch (error) {
+          if (error.message.includes('ENS is not supported on network')) {
+            throw new InvalidAddressError('Provided address invalid and ENS not supported')
+          }
+
+          throw new InvalidAddressError('Provided address invalid and ENS domain not found')
+        }
+
+        return address
+      }
+    }
+
     // Enable Web3 provider (EIP-1102)
     if (typeof this.web3.currentProvider.enable !== 'undefined') {
       try {
@@ -113,7 +132,7 @@ class EthAvatar {
   /**
    * Get avatar of Ethereum address.
    *
-   * @param {string} [address] - Address to get avatar (default is current Ethereum address).
+   * @param {string} [address] - Address or ENS domain to get avatar (default is current Ethereum address).
    *
    * @return {buffer} - Buffer data of avatar.
    *
@@ -123,9 +142,7 @@ class EthAvatar {
     await this._initialized
 
     // Get address
-    if (address === null) {
-      address = await this._address()
-    }
+    address = await this._address(address)
 
     // Get avatar
     try {
@@ -221,7 +238,7 @@ class EthAvatar {
    * Watch for avatar changes.
    *
    * @param {function} [callback] - Callback when event is received.
-   * @param {string} [address] - Address to watch (default is current Ethereum address).
+   * @param {string} [address] - Address or ENS domain to watch (default is current Ethereum address).
    *
    * @return {void}
    */
@@ -229,9 +246,7 @@ class EthAvatar {
     this._initialized
       .then(async () => {
         // Get address
-        if (address === null) {
-          address = await this._address()
-        }
+        address = await this._address(address)
 
         // Get contract event
         const event = this.instance.DidSetIPFSHash

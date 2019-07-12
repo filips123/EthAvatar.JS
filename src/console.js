@@ -142,7 +142,7 @@ program
   .description('Get avatar of address to file')
   .option('--web3 [optional]', 'Web3 Conenction')
   .option('--ipfs [optional]', 'IPFS Conenction')
-  .option('--address [optional]', 'Ethereum address')
+  .option('--address [optional]', 'Ethereum address or ENS domain')
   .action(get)
 
 program

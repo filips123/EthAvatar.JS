@@ -27,16 +27,14 @@ class UrlHelper {
    * Post avatar to URL as FormData.
    *
    * @param {string} [url] - URL to get avatar.
-   * @param {string} [address] - Address to get avatar (default is current Ethereum address).
+   * @param {string} [address] - Address or ENS domain to get avatar (default is current Ethereum address).
    *
    * @return {void}
    *
    * @async
    */
   async toUrl (url, address = null) {
-    if (address === null) {
-      address = await this.ethavatar._address()
-    }
+    address = await this.ethavatar._address(address)
 
     let avatar = await this.ethavatar.get(address)
 
