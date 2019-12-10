@@ -53,7 +53,7 @@ class FileHelper {
   async toFile (filename, address = null) {
     address = await this.ethavatar._address(address)
 
-    let avatar = await this.ethavatar.get(address)
+    const avatar = await this.ethavatar.get(address)
 
     try {
       await this.writeFile(
@@ -62,7 +62,7 @@ class FileHelper {
         'binary'
       )
     } catch (error) /* istanbul ignore next */ {
-      let err = new DownloadFileError(error)
+      const err = new DownloadFileError(error)
       err.stack = error.stack
 
       throw err
@@ -86,7 +86,7 @@ class FileHelper {
       data = await this.readFile(filename)
       avatar = Buffer.from(data)
     } catch (error) /* istanbul ignore next */ {
-      let err = new UploadFileError(error)
+      const err = new UploadFileError(error)
       err.stack = error.stack
 
       throw err

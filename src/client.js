@@ -68,7 +68,7 @@ class EthAvatar {
     this.contract.setProvider(this.web3.currentProvider)
 
     // Get smart contract address
-    let getContract = (address) => {
+    const getContract = (address) => {
       if (address === null) {
         return this.contract.deployed()
       } else {
@@ -82,7 +82,7 @@ class EthAvatar {
 
       return this
     } catch (error) /* istanbul ignore next */ {
-      let err = new ContractNotFoundError(error.message)
+      const err = new ContractNotFoundError(error.message)
       err.stack = error.stack
 
       throw err
@@ -113,7 +113,7 @@ class EthAvatar {
       try {
         await this.web3.currentProvider.enable()
       } catch (error) /* istanbul ignore next */ {
-        let err = new Web3NotAllowedError(error)
+        const err = new Web3NotAllowedError(error)
         err.stack = error.stack
 
         throw err
@@ -121,7 +121,7 @@ class EthAvatar {
     }
 
     // Get Ethereum address
-    let accounts = await this.web3.eth.getAccounts()
+    const accounts = await this.web3.eth.getAccounts()
     if (typeof accounts[0] !== 'undefined') {
       return accounts[0]
     } else /* istanbul ignore next */ {
@@ -147,7 +147,7 @@ class EthAvatar {
     // Get avatar
     try {
       // Get avatar hash from contract
-      let hash = await this.instance.getIPFSHash(address)
+      const hash = await this.instance.getIPFSHash(address)
 
       // Cancel if avatar is not set
       if (hash === '') {
@@ -155,17 +155,17 @@ class EthAvatar {
       }
 
       // Get avatar data from IPFS
-      let result = await this.ipfs.get(hash)
-      let data = JSON.parse(Buffer.from(result[0].content).toString())
+      const result = await this.ipfs.get(hash)
+      const data = JSON.parse(Buffer.from(result[0].content).toString())
 
       // Get avatar image from IPFS
-      let avatar = await this.ipfs.get(data.imageHash)
-      let image = avatar[0].content
+      const avatar = await this.ipfs.get(data.imageHash)
+      const image = avatar[0].content
 
       // Return image
       return image
     } catch (error) /* istanbul ignore next */ {
-      let err = new GetAvatarError(error.message)
+      const err = new GetAvatarError(error.message)
       err.stack = error.stack
 
       throw err
@@ -185,23 +185,23 @@ class EthAvatar {
     await this._initialized
 
     // Get address
-    let address = await this._address()
+    const address = await this._address()
 
     // Set avatar
     try {
       // Set avatar image to IPFS
-      let imageHash = (await this.ipfs.add(buffer))[0].hash
+      const imageHash = (await this.ipfs.add(buffer))[0].hash
 
       // Set avatar data to IPFS
-      let dataBuffer = Buffer.from(JSON.stringify({ imageHash: imageHash }))
-      let dataHash = (await this.ipfs.add(dataBuffer))[0].hash
+      const dataBuffer = Buffer.from(JSON.stringify({ imageHash: imageHash }))
+      const dataHash = (await this.ipfs.add(dataBuffer))[0].hash
 
       // Set avatar hash to contract
       await this.instance.setIPFSHash(dataHash, { from: address })
 
       return
     } catch (error) /* istanbul ignore next */ {
-      let err = new SetAvatarError(error.message)
+      const err = new SetAvatarError(error.message)
       err.stack = error.stack
 
       throw err
@@ -219,7 +219,7 @@ class EthAvatar {
     await this._initialized
 
     // Get address
-    let address = await this._address()
+    const address = await this._address()
 
     // Remove avatar
     try {
@@ -227,7 +227,7 @@ class EthAvatar {
 
       return
     } catch (error) /* istanbul ignore next */ {
-      let err = new RemoveAvatarError(error.message)
+      const err = new RemoveAvatarError(error.message)
       err.stack = error.stack
 
       throw err

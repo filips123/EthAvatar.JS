@@ -13,7 +13,7 @@ const FileHelper = require('./helpers/file.js')
 
 const { version } = require('../package.json')
 
-let __getWeb3Connection = (required, optional) => {
+const __getWeb3Connection = (required, optional) => {
   let web3Connection
 
   try {
@@ -33,7 +33,7 @@ let __getWeb3Connection = (required, optional) => {
   return web3Connection
 }
 
-let __getIpfsConnection = (required, optional) => {
+const __getIpfsConnection = (required, optional) => {
   let ipfsConnection
 
   try {
@@ -52,14 +52,14 @@ let __getIpfsConnection = (required, optional) => {
   return ipfsConnection
 }
 
-let __getFileHelper = (web3Connection, ipfsConnection) => {
+const __getFileHelper = (web3Connection, ipfsConnection) => {
   const ethavatar = new EthAvatar(web3Connection, ipfsConnection)
   const fileHelper = new FileHelper(ethavatar)
 
   return fileHelper
 }
 
-let config = (optional) => {
+const config = (optional) => {
   if (typeof optional.web3 === 'string') {
     settings.set('web3', optional.web3)
   } else if (optional.web3 === true) {
@@ -72,14 +72,14 @@ let config = (optional) => {
     settings.unset('ipfs')
   }
 
-  let web3Conn = typeof settings.get('web3') !== 'undefined' ? settings.get('web3') : 'Not set'
-  let ipfsConn = typeof settings.get('ipfs') !== 'undefined' ? settings.get('ipfs') : 'Not set'
+  const web3Conn = typeof settings.get('web3') !== 'undefined' ? settings.get('web3') : 'Not set'
+  const ipfsConn = typeof settings.get('ipfs') !== 'undefined' ? settings.get('ipfs') : 'Not set'
 
   process.stdout.write('Current Web3 connection: ' + web3Conn + '\n')
   process.stdout.write('Current IPFS connection: ' + ipfsConn)
 }
 
-let get = async (required, optional) => {
+const get = async (required, optional) => {
   const web3Connection = __getWeb3Connection(required, optional)
   const ipfsConnection = __getIpfsConnection(required, optional)
 
@@ -103,7 +103,7 @@ let get = async (required, optional) => {
   process.exit(0)
 }
 
-let set = async (required, optional) => {
+const set = async (required, optional) => {
   const web3Connection = __getWeb3Connection(required, optional)
   const ipfsConnection = __getIpfsConnection(required, optional)
 
@@ -116,7 +116,7 @@ let set = async (required, optional) => {
     process.exit(1)
   }
 
-  let address = (await web3Connection.eth.getAccounts())[0]
+  const address = (await web3Connection.eth.getAccounts())[0]
 
   process.stdout.write(`Avatar of address ${address} from file ${required} has been uploaded to blockchain`)
   process.exit(0)

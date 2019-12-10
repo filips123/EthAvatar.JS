@@ -35,17 +35,17 @@ describe('FileHelper', function () {
 
   describe('#toFile()', function () {
     it('should download avatar to file', async function () {
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
 
       const fileHelper = new FileHelper(ethavatar)
       await fileHelper.toFile(path.join(os.tmpdir(), 'download.png'))
 
       const readFile = promisify(fs.readFile)
-      let data = await readFile(path.join(os.tmpdir(), 'download.png'))
+      const data = await readFile(path.join(os.tmpdir(), 'download.png'))
 
-      let expected = avatar
-      let actual = Buffer.from(data)
+      const expected = avatar
+      const actual = Buffer.from(data)
 
       assert(Buffer.compare(expected, actual) === 0, 'Avatar is not correctly downloaded to file')
     })
@@ -53,7 +53,7 @@ describe('FileHelper', function () {
 
   describe('#fromFile()', function () {
     it('should upload avatar from file', async function () {
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
 
       const writeFile = promisify(fs.writeFile)
       await writeFile(
@@ -65,8 +65,8 @@ describe('FileHelper', function () {
       const fileHelper = new FileHelper(ethavatar)
       await fileHelper.fromFile(path.join(os.tmpdir(), 'upload.png'))
 
-      let expected = avatar
-      let actual = await ethavatar.get()
+      const expected = avatar
+      const actual = await ethavatar.get()
 
       assert(Buffer.compare(expected, actual) === 0, 'Avatar is not correctly uploaded from file')
     })

@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 /* eslint no-new: 0 */
 /* eslint dot-notation: 0 */
+/* eslint require-await: 0 */
 /* global ethavatar:true */
 /* global web3:true */
 /* global ipfs:true */
@@ -50,7 +51,7 @@ describe('EthAvatar', function () {
     })
 
     it('should not construct without Web3 provider', async function () {
-      let web3Connection = global.web3
+      const web3Connection = global.web3
       delete global.web3
 
       try {
@@ -75,9 +76,9 @@ describe('EthAvatar', function () {
     })
 
     it('should construct using specified contract address', async function () {
-      let network = await web3.eth.net.getId()
-      let contract = require('../src/data/EthAvatar.json')
-      let address = contract['networks'][network]['address']
+      const network = await web3.eth.net.getId()
+      const contract = require('../src/data/EthAvatar.json')
+      const address = contract['networks'][network]['address']
 
       new EthAvatar(null, null, address)
     })
@@ -85,30 +86,30 @@ describe('EthAvatar', function () {
 
   describe('#_address()', function () {
     it('should use provided Ethereum address', async function () {
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
 
-      let expected = '0x76aECE9DBF73C831ef1CAbE0b748531bec9d054E'
-      let actual = await ethavatar._address(expected)
+      const expected = '0x76aECE9DBF73C831ef1CAbE0b748531bec9d054E'
+      const actual = await ethavatar._address(expected)
 
       assert.strictEqual(actual, expected, 'Provided Ethereum address is not correct')
     })
 
     it('should use provided ENS domain', async function () {
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
       ethavatar.web3 = new Web3('https://cloudflare-eth.com')
 
-      let domain = 'ethereum.eth'
+      const domain = 'ethereum.eth'
 
-      let expected = await ethavatar.web3.eth.ens.getAddress(domain)
-      let actual = await ethavatar._address(domain)
+      const expected = await ethavatar.web3.eth.ens.getAddress(domain)
+      const actual = await ethavatar._address(domain)
 
       assert.strictEqual(actual, expected, 'Provided ENS domain is not correct')
     })
 
     it('should use not ENS on unsupported network', async function () {
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
 
-      let domain = 'ethereum.eth'
+      const domain = 'ethereum.eth'
 
       try {
         await ethavatar._address(domain)
@@ -118,10 +119,10 @@ describe('EthAvatar', function () {
     })
 
     it('should not use ENS on unexisting domain', async function () {
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
       ethavatar.web3 = new Web3('https://cloudflare-eth.com')
 
-      let domain = 'this-domain-does-not-exist-on-mainnet-because-it-is-only-for-testing-of-unexisting-domains.eth'
+      const domain = 'this-domain-does-not-exist-on-mainnet-because-it-is-only-for-testing-of-unexisting-domains.eth'
 
       try {
         await ethavatar._address(domain)
@@ -136,17 +137,17 @@ describe('EthAvatar', function () {
         return true
       }
 
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
       await ethavatar._address()
 
       delete global.ethereum
     })
 
     it('should get correct default Ethereum address', async function () {
-      let ethavatar = new EthAvatar()
+      const ethavatar = new EthAvatar()
 
-      let expected = (await web3.eth.getAccounts())[0]
-      let actual = await ethavatar._address()
+      const expected = (await web3.eth.getAccounts())[0]
+      const actual = await ethavatar._address()
 
       assert.strictEqual(actual, expected, 'Default Ethereum address is not correct')
     })
@@ -154,18 +155,18 @@ describe('EthAvatar', function () {
 
   describe('#get()', function () {
     before(async function () {
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
     })
 
     it('should not get avatar that not exists', async function () {
-      let avatar = await ethavatar.get('0xA06d95Ec8a2c91cC3ED6d7F63C0f71F75Cc4EBf1')
+      const avatar = await ethavatar.get('0xA06d95Ec8a2c91cC3ED6d7F63C0f71F75Cc4EBf1')
       assert.strictEqual(typeof avatar, 'undefined', 'Avatar that not exists is not undefined')
     })
 
     it('should get existing avatar', async function () {
-      let expected = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
-      let actual = await ethavatar.get()
+      const expected = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const actual = await ethavatar.get()
 
       assert.instanceOf(actual, Buffer, 'Avatar is not instance of Buffer')
       assert(Buffer.compare(expected, actual) === 0, 'Avatar is not correctly get')
@@ -174,11 +175,11 @@ describe('EthAvatar', function () {
 
   describe('#set()', function () {
     it('should set avatar', async function () {
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
 
-      let expected = avatar
-      let actual = await ethavatar.get()
+      const expected = avatar
+      const actual = await ethavatar.get()
 
       assert(Buffer.compare(expected, actual) === 0, 'Avatar is not correctly set')
     })
@@ -188,8 +189,8 @@ describe('EthAvatar', function () {
     it('should remove avatar', async function () {
       await ethavatar.remove()
 
-      let expected
-      let actual = await ethavatar.get()
+      const expected = undefined
+      const actual = await ethavatar.get()
 
       assert.strictEqual(actual, expected, 'Avatar is not correctly removed')
     })
@@ -198,13 +199,13 @@ describe('EthAvatar', function () {
   describe('#watch()', function () {
     it('should watch for avatar changes', async function () {
       ethavatar.watch(async (result) => {
-        let expected = web3.eth.accounts[0]
-        let actual = result.hashAddress
+        const expected = web3.eth.accounts[0]
+        const actual = result.hashAddress
 
         assert.strictEqual(actual, expected, 'Watching address is not correct')
       })
 
-      let avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
+      const avatar = Buffer.from(['00', '01', '03', '04', '05', '06', '07', '08', '09'])
       await ethavatar.set(avatar)
     })
   })

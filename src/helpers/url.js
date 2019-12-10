@@ -36,10 +36,10 @@ class UrlHelper {
   async toUrl (url, address = null) {
     address = await this.ethavatar._address(address)
 
-    let avatar = await this.ethavatar.get(address)
+    const avatar = await this.ethavatar.get(address)
 
     try {
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append('address', address)
       formData.append('avatar', avatar)
 
@@ -57,7 +57,7 @@ class UrlHelper {
         data: data
       })
     } catch (error) /* istanbul ignore next */ {
-      let err = new PostUrlError(error)
+      const err = new PostUrlError(error)
       err.stack = error.stack
 
       throw err
@@ -77,16 +77,16 @@ class UrlHelper {
     let avatar = null
 
     try {
-      let response = await axios({
+      const response = await axios({
         url: url,
         method: 'GET',
         responseType: 'arraybuffer'
       })
-      let data = response.data ? response.data : response.request.responseText
+      const data = response.data ? response.data : response.request.responseText
 
       avatar = Buffer.from(data)
     } catch (error) /* istanbul ignore next */ {
-      let err = new GetUrlError(error)
+      const err = new GetUrlError(error)
       err.stack = error.stack
 
       throw err
