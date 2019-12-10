@@ -15,8 +15,8 @@
   "homepage": "https://github.com/gitcoinco/ethavatar/",
   "bugs": "https://github.com/filips123/ethavatar.js/issues/",
   "main": "src/index.js",
-  "unpkg": "dist/ethavatar.min.js",
-  "jsdelivr": "dist/ethavatar.min.js",
+  "unpkg": "dist/index.min.js",
+  "jsdelivr": "dist/index.min.js",
   "runkitExampleFilename": "example.js",
   "bin": {
     "ethavatar": "src/console.js"
