@@ -4,7 +4,7 @@
 'use strict'
 
 const Web3 = require('web3')
-const TruffleContract = require('truffle-contract')
+const TruffleContract = require('@truffle/contract')
 const IpfsClient = require('ipfs-http-client')
 
 const EthAvatarContract = require('./data/EthAvatar')
@@ -58,7 +58,7 @@ class EthAvatar {
 
     // Get IPFS connection
     if (ipfsConn === null) {
-      this.ipfs = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
+      this.ipfs = IpfsClient('https://ipfs.infura.io:5001')
     } else {
       this.ipfs = ipfsConn
     }

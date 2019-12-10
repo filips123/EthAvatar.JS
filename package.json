@@ -29,20 +29,20 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "web3": "1.0.0-beta.37",
-    "truffle-contract": "4.x",
-    "ipfs-http-client": "33.x",
-    "commander": "2.x",
-    "user-settings": "0.x",
-    "util.promisify": "1.x",
-    "axios": "0.x",
-    "form-data": "2.x"
+    "web3": "^1.2.4",
+    "@truffle/contract": "^4.1.1",
+    "ipfs-http-client": "^40.1.0",
+    "commander": "^4.0.1",
+    "user-settings": "^0.2.0",
+    "axios": "^0.19.0",
+    "form-data": "^3.0.0"
   },
   "devDependencies": {
-    "aegir": "^17.0.0"
+    "aegir": "^20.4.1",
+    "chai": "^4.2.0"
   },
   "resolutions": {
-    "eth-lib/keccakjs/sha3": "^1.2.3",
+    "eth-lib/keccakjs/sha3": "^1.2.6",
     "web3/web3-eth/web3-eth-accounts/scrypt.js": "^0.3.0"
   },
   "scripts": {

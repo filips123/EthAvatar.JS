@@ -8,8 +8,6 @@ const IpfsClient = require('ipfs-http-client')
 const program = require('commander')
 const settings = require('user-settings').file('.ethavatar')
 
-const URL = require('url')
-
 const EthAvatar = require('./client.js')
 const FileHelper = require('./helpers/file.js')
 
@@ -40,13 +38,11 @@ let __getIpfsConnection = (required, optional) => {
 
   try {
     if (typeof optional.ipfs === 'string') {
-      let ipfsURL = new URL(optional.ipfs)
-      ipfsConnection = IpfsClient(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
+      ipfsConnection = IpfsClient(optional.ipfs)
     } else if (typeof settings.get('ipfs') !== 'undefined') {
-      let ipfsURL = new URL(settings.get('ipfs'))
-      ipfsConnection = IpfsClient(ipfsURL.hostname, ipfsURL.port, { protocol: ipfsURL.protocol })
+      ipfsConnection = IpfsClient(optional.ipfs)
     } else {
-      ipfsConnection = IpfsClient('ipfs.infura.io', '5001', { protocol: 'https' })
+      ipfsConnection = IpfsClient('https://ipfs.infura.io:5001')
     }
   } catch (error) {
     process.stderr.write(error.message)
