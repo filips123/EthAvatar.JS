@@ -19,9 +19,7 @@ describe('EthAvatar', function () {
   this.timeout(60000)
 
   before(function () {
-    const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')
-    const web3Connection = new Web3(web3Provider)
-
+    const web3Connection = new Web3('http://127.0.0.1:8545/')
     const ipfsConnection = IpfsClient('https://ipfs.infura.io:5001')
 
     global.web3 = web3Connection
@@ -55,7 +53,8 @@ describe('EthAvatar', function () {
       delete global.web3
 
       try {
-        await new EthAvatar()
+        const ethavatar = new EthAvatar()
+        await ethavatar._initialized
       } catch (err) {
         assert.strictEqual(err.message, 'Default Web3 provider not found', 'Class incorrectly construct without Web3 provider')
       }
@@ -95,8 +94,8 @@ describe('EthAvatar', function () {
     })
 
     it('should use provided ENS domain', async function () {
-      const ethavatar = new EthAvatar()
-      ethavatar.web3 = new Web3('https://cloudflare-eth.com')
+      const web3 = new Web3('https://cloudflare-eth.com')
+      const ethavatar = new EthAvatar(web3)
 
       const domain = 'ethereum.eth'
 
@@ -115,12 +114,15 @@ describe('EthAvatar', function () {
         await ethavatar._address(domain)
       } catch (err) {
         assert.strictEqual(err.message, 'Provided address invalid and ENS not supported', 'Program incorrectly use ENS on unsupported network')
+        return
       }
+
+      assert.fail('Program incorrectly use unexisting domain')
     })
 
     it('should not use ENS on unexisting domain', async function () {
-      const ethavatar = new EthAvatar()
-      ethavatar.web3 = new Web3('https://cloudflare-eth.com')
+      const web3 = new Web3('https://cloudflare-eth.com')
+      const ethavatar = new EthAvatar(web3)
 
       const domain = 'this-domain-does-not-exist-on-mainnet-because-it-is-only-for-testing-of-unexisting-domains.eth'
 
@@ -128,7 +130,10 @@ describe('EthAvatar', function () {
         await ethavatar._address(domain)
       } catch (err) {
         assert.strictEqual(err.message, 'Provided address invalid and ENS domain not found', 'Program incorrectly use unexisting domain')
+        return
       }
+
+      assert.fail('Program incorrectly use unexisting domain')
     })
 
     it('should enable privacy (EIP-1102) Web3 provider', async function () {
@@ -200,7 +205,7 @@ describe('EthAvatar', function () {
     it('should watch for avatar changes', async function () {
       ethavatar.watch(async (result) => {
         const expected = web3.eth.accounts[0]
-        const actual = result.hashAddress
+        const actual = result.hashAddres
 
         assert.strictEqual(actual, expected, 'Watching address is not correct')
       })

@@ -3,8 +3,10 @@
 
 'use strict'
 
+const createContractEvent = require('@drizzle-utils/contract-event-stream')
+const createNewBlock = require('@drizzle-utils/new-block-stream')
+
 const Web3 = require('web3')
-const TruffleContract = require('@truffle/contract')
 const IpfsClient = require('ipfs-http-client')
 
 const EthAvatarContract = require('./data/EthAvatar')
@@ -58,35 +60,23 @@ class EthAvatar {
 
     // Get IPFS connection
     if (ipfsConn === null) {
-      this.ipfs = IpfsClient('https://ipfs.infura.io:5001')
+      this.ipfs = new IpfsClient('https://ipfs.infura.io:5001')
     } else {
       this.ipfs = ipfsConn
     }
 
-    // Get smart contract details
-    this.contract = TruffleContract(EthAvatarContract)
-    this.contract.setProvider(this.web3.currentProvider)
+    // Get smart contract connection
+    if (contract === null) {
+      const network = await this.web3.eth.net.getId()
 
-    // Get smart contract address
-    const getContract = (address) => {
-      if (address === null) {
-        return this.contract.deployed()
-      } else {
-        return this.contract.at(address)
+      try {
+        contract = EthAvatarContract.networks[network].address
+      } catch (error) {
+        throw new ContractNotFoundError('Contract not found on current network')
       }
     }
 
-    // Instantiate smart contract
-    try {
-      this.instance = await getContract(contract)
-
-      return this
-    } catch (error) /* istanbul ignore next */ {
-      const err = new ContractNotFoundError(error.message)
-      err.stack = error.stack
-
-      throw err
-    }
+    this.contract = new this.web3.eth.Contract(EthAvatarContract.abi, contract)
   }
 
   async _address (address = null) {
@@ -147,7 +137,7 @@ class EthAvatar {
     // Get avatar
     try {
       // Get avatar hash from contract
-      const hash = await this.instance.getIPFSHash(address)
+      const hash = await this.contract.methods.getIPFSHash(address).call()
 
       // Cancel if avatar is not set
       if (hash === '') {
@@ -155,12 +145,28 @@ class EthAvatar {
       }
 
       // Get avatar data from IPFS
-      const result = await this.ipfs.get(hash)
-      const data = JSON.parse(Buffer.from(result[0].content).toString())
+      let data
+      for await (const result of this.ipfs.get(hash)) {
+        let chunks = Buffer.from([])
+        for await (const chunk of result.content) {
+          chunks = Buffer.concat([chunks, chunk.slice()])
+        }
+
+        data = JSON.parse(chunks.toString())
+        break
+      }
 
       // Get avatar image from IPFS
-      const avatar = await this.ipfs.get(data.imageHash)
-      const image = avatar[0].content
+      let image
+      for await (const result of this.ipfs.get(data.imageHash)) {
+        let chunks = Buffer.from([])
+        for await (const chunk of result.content) {
+          chunks = Buffer.concat([chunks, chunk.slice()])
+        }
+
+        image = chunks
+        break
+      }
 
       // Return image
       return image
@@ -190,14 +196,23 @@ class EthAvatar {
     // Set avatar
     try {
       // Set avatar image to IPFS
-      const imageHash = (await this.ipfs.add(buffer))[0].hash
+
+      let imageHash
+      for await (const imageResult of this.ipfs.add(buffer)) {
+        imageHash = imageResult.cid.toString()
+        break
+      }
 
       // Set avatar data to IPFS
       const dataBuffer = Buffer.from(JSON.stringify({ imageHash: imageHash }))
-      const dataHash = (await this.ipfs.add(dataBuffer))[0].hash
+      let dataHash
+      for await (const dataResult of this.ipfs.add(dataBuffer)) {
+        dataHash = dataResult.cid.toString()
+        break
+      }
 
       // Set avatar hash to contract
-      await this.instance.setIPFSHash(dataHash, { from: address })
+      await this.contract.methods.setIPFSHash(dataHash).send({ from: address })
 
       return
     } catch (error) /* istanbul ignore next */ {
@@ -223,7 +238,7 @@ class EthAvatar {
 
     // Remove avatar
     try {
-      await this.instance.setIPFSHash('', { from: address })
+      await this.contract.methods.setIPFSHash('').send({ from: address })
 
       return
     } catch (error) /* istanbul ignore next */ {
@@ -249,14 +264,14 @@ class EthAvatar {
         address = await this._address(address)
 
         // Get contract event
-        const event = this.instance.DidSetIPFSHash
+        const newBlock$ = createNewBlock({ web3: this.web3, pollingInterval: 200 }).observable
+        const contractEvent = createContractEvent({ abi: this.contract._jsonInterface, address: this.contract._address, web3: this.web3, newBlock$: newBlock$ })
 
         // Watch for changes
-        event((error, result) => {
-          if (!error) {
-            if (result.args.hashAddress === address) {
-              callback(result.args)
-            }
+        contractEvent.subscribe(event => {
+          if (event.event === 'DidSetIPFSHash' && event.returnValues.hashAddress === address) {
+            const result = { hashAddress: event.returnValues.hashAddress, hash: event.returnValues.hash }
+            callback(result)
           }
         })
       })

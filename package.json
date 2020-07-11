@@ -29,16 +29,17 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "web3": "^1.2.4",
-    "@truffle/contract": "^4.1.1",
-    "ipfs-http-client": "^40.1.0",
-    "commander": "^4.0.1",
+    "@drizzle-utils/contract-event-stream": "^0.2.0",
+    "@drizzle-utils/new-block-stream": "^0.2.1",
+    "web3": "^1.2.9",
+    "ipfs-http-client": "^44.3.0",
+    "commander": "^5.1.0",
     "user-settings": "^0.2.0",
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "form-data": "^3.0.0"
   },
   "devDependencies": {
-    "aegir": "^20.4.1",
+    "aegir": "^25.0.0",
     "chai": "^4.2.0"
   },
   "resolutions": {

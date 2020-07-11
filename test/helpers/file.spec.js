@@ -22,9 +22,7 @@ describe('FileHelper', function () {
   this.timeout(60000)
 
   before(function () {
-    const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545/')
-    const web3Connection = new Web3(web3Provider)
-
+    const web3Connection = new Web3('http://127.0.0.1:8545/')
     const ipfsConnection = IpfsClient('https://ipfs.infura.io:5001')
 
     global.web3 = web3Connection
