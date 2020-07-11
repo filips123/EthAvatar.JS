@@ -1,6 +1,6 @@
 'use strict'
 
-const axios = require('axios')
+const fetch = require('cross-fetch')
 const FormData = require('form-data')
 
 const GetUrlError = require('../errors/GetUrlError')
@@ -43,22 +43,21 @@ class UrlHelper {
       formData.append('address', address)
       formData.append('avatar', avatar)
 
-      let data = ''
-      for (var i = 0, len = formData._streams.length; i < len; i++) {
-        if (typeof formData._streams[i] !== 'function') {
-          data += formData._streams[i] + '\r\n'
-        }
+      const response = await fetch(url, { method: 'POST', body: formData })
+      if (!response.ok) {
+        const err = new PostUrlError('Posting to URL failed with status code ' + response.status)
+        err.status = response.status
+
+        throw err
+      }
+    } catch (error) /* istanbul ignore next */ {
+      if (error instanceof PostUrlError) {
+        throw error
       }
 
-      await axios({
-        url: url,
-        method: 'POST',
-        headers: formData.getHeaders(),
-        data: data
-      })
-    } catch (error) /* istanbul ignore next */ {
       const err = new PostUrlError(error)
       err.stack = error.stack
+      err.status = 0
 
       throw err
     }
@@ -77,17 +76,25 @@ class UrlHelper {
     let avatar = null
 
     try {
-      const response = await axios({
-        url: url,
-        method: 'GET',
-        responseType: 'arraybuffer'
-      })
-      const data = response.data ? response.data : response.request.responseText
+      const response = await fetch(url)
 
+      if (!response.ok) {
+        const err = new GetUrlError('Getting from URL failed with status code ' + response.status)
+        err.status = response.status
+
+        throw err
+      }
+
+      const data = await response.arrayBuffer()
       avatar = Buffer.from(data)
     } catch (error) /* istanbul ignore next */ {
+      if (error instanceof GetUrlError) {
+        throw error
+      }
+
       const err = new GetUrlError(error)
       err.stack = error.stack
+      err.status = 0
 
       throw err
     }

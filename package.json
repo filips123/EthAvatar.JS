@@ -33,10 +33,10 @@
     "@drizzle-utils/new-block-stream": "^0.2.1",
     "web3": "^1.2.9",
     "ipfs-http-client": "^44.3.0",
+    "cross-fetch": "^3.0.5",
+    "form-data": "^3.0.0",
     "commander": "^5.1.0",
-    "user-settings": "^0.2.0",
-    "axios": "^0.19.2",
-    "form-data": "^3.0.0"
+    "user-settings": "^0.2.0"
   },
   "devDependencies": {
     "aegir": "^25.0.0",

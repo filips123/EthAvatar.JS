@@ -260,7 +260,7 @@ const urlHelper = new UrlHelper(ethavatar)
 You can then post avatar as multipart form data:
 
 ```js
-fileHelper.toUrl('https://example.com/', '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
+urlHelper.toUrl('https://example.com/', '0xe12Aa5FB5659bb0DB3f488e29701fE303bcBAf65')
   .then((avatar) => {
     console.log('Avatar downloaded!')
 
@@ -269,12 +269,12 @@ fileHelper.toUrl('https://example.com/', '0xe12Aa5FB5659bb0DB3f488e29701fE303bcB
   })
 ```
 
-The request will have ``multipart/form-data`` content type and include `address` and `avatar` form values. You should currently left trim (remove whitespaces and new lines) them because of the bug.
+The request will have ``multipart/form-data`` content type and include `address` and `avatar` form values.
 
 You can also get avatar from URL:
 
 ```js
-fileHelper.fromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg')
+urlHelper.fromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg')
   .then((avatar) => {
     console.log('Avatar uploaded!')
 

@@ -7,7 +7,7 @@
 
 const assert = require('chai').assert
 
-const axios = require('axios')
+const fetch = require('cross-fetch')
 
 const Web3 = require('web3')
 const IpfsClient = require('ipfs-http-client')
@@ -30,21 +30,15 @@ describe('UrlHelper', function () {
 
   describe('#toUrl()', function () {
     it('should post avatar to URL', async function () {
-      const tokenResponse = await axios({
-        url: 'https://webhook.site/token',
-        method: 'POST'
-      })
-      const tokenData = tokenResponse.data ? tokenResponse.data : tokenResponse.request.responseText
+      const tokenResponse = await fetch('https://webhook.site/token', { method: 'POST' })
+      const tokenData = await tokenResponse.json()
       const token = tokenData.uuid
 
       const urlHelper = new UrlHelper(ethavatar)
       await urlHelper.toUrl('https://webhook.site/' + token)
 
-      const requestsResponse = await axios({
-        url: 'https://webhook.site/token/' + token + '/requests',
-        method: 'GET'
-      })
-      const requestsData = requestsResponse.data ? requestsResponse.data : requestsResponse.request.responseText
+      const requestsResponse = await fetch('https://webhook.site/token/' + token + '/requests')
+      const requestsData = await requestsResponse.json()
       const request = requestsData['data'][requestsData.to - 1]['request']
 
       const expectedAddress = await ethavatar._address()
@@ -65,12 +59,8 @@ describe('UrlHelper', function () {
       const urlHelper = new UrlHelper(ethavatar)
       await urlHelper.fromUrl(url)
 
-      const response = await axios({
-        url: url,
-        method: 'GET',
-        responseType: 'arraybuffer'
-      })
-      const data = response.data ? response.data : response.request.responseText
+      const response = await fetch(url)
+      const data = await response.arrayBuffer()
 
       const expected = Buffer.from(data)
       const actual = await ethavatar.get()
