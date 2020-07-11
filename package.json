@@ -39,7 +39,7 @@
     "user-settings": "^0.2.0"
   },
   "devDependencies": {
-    "aegir": "^25.0.0",
+    "aegir": "^20.4.1",
     "chai": "^4.2.0"
   },
   "resolutions": {
