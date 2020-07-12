@@ -22,7 +22,7 @@ before_script:
       git clone https://github.com/gitcoinco/ethavatar.git /tmp/ethavatar
       cd /tmp/ethavatar
       printf "module.exports = {\nnetworks: {\ndevelopment: {\nhost: \"127.0.0.1\",\nport: 8545,\nnetwork_id: \"*\"\n}\n}\n}" > truffle.js
-      rm -rf build && truffle migrate
+      truffle migrate
     )
 
   # Copy smart contract to package

@@ -94,7 +94,8 @@ describe('EthAvatar', function () {
     })
 
     it('should use provided ENS domain', async function () {
-      const web3 = new Web3('https://cloudflare-eth.com')
+      const provider = process.env.INFURA_PROJECT_ID ? 'https://mainnet.infura.io/v3/' + process.env.INFURA_PROJECT_ID : 'https://cloudflare-eth.com'
+      const web3 = new Web3(provider)
       const ethavatar = new EthAvatar(web3)
 
       const domain = 'ethereum.eth'
@@ -121,7 +122,8 @@ describe('EthAvatar', function () {
     })
 
     it('should not use ENS on unexisting domain', async function () {
-      const web3 = new Web3('https://cloudflare-eth.com')
+      const provider = process.env.INFURA_PROJECT_ID ? 'https://mainnet.infura.io/v3/' + process.env.INFURA_PROJECT_ID : 'https://cloudflare-eth.com'
+      const web3 = new Web3(provider)
       const ethavatar = new EthAvatar(web3)
 
       const domain = 'this-domain-does-not-exist-on-mainnet-because-it-is-only-for-testing-of-unexisting-domains.eth'
@@ -204,8 +206,8 @@ describe('EthAvatar', function () {
   describe('#watch()', function () {
     it('should watch for avatar changes', async function () {
       ethavatar.watch(async (result) => {
-        const expected = web3.eth.accounts[0]
-        const actual = result.hashAddres
+        const expected = (await web3.eth.getAccounts())[0]
+        const actual = result.hashAddress
 
         assert.strictEqual(actual, expected, 'Watching address is not correct')
       })
